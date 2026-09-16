@@ -77,3 +77,43 @@
   .profile-header-card { flex-direction: column; text-align: center; padding: 28px 20px; }
   .settings-card { padding: 20px; }
 }
+
+/* ── Mobile Profile redesign ── */
+@media (max-width: 768px) {
+  .profile-container { max-width: 100%; }
+
+  .profile-header-card {
+    margin: 0 16px 16px;
+    background: linear-gradient(135deg, rgba(26,79,214,0.20), rgba(14,165,233,0.10));
+    border-color: rgba(26,79,214,0.25);
+    border-radius: 20px;
+    padding: 24px 20px;
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .profile-header-card::before {
+    background: linear-gradient(90deg, #1a4fd6, #0ea5e9);
+  }
+
+  .profile-avatar-large {
+    background: linear-gradient(135deg, #1a4fd6, #0ea5e9);
+    box-shadow: 0 8px 28px rgba(26,79,214,0.45);
+    width: 80px; height: 80px;
+    font-size: 1.8rem;
+  }
+
+  .settings-card {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.08);
+    border-radius: 18px;
+    margin: 0 16px 14px;
+    padding: 20px;
+  }
+
+  .danger-zone {
+    border-color: rgba(239,68,68,0.22);
+    background: rgba(239,68,68,0.04);
+  }
+}

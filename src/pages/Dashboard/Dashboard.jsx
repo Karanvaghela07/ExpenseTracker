@@ -5,6 +5,9 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
   Plus,
+  TrendingUp,
+  Clock,
+  Bell,
 } from 'lucide-react';
 import { PieChart, Pie, Cell, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useExpense } from '../../context/ExpenseContext';
@@ -35,6 +38,12 @@ const Dashboard = () => {
   const areaData = getLast30DaysTrend(state.expenses);
   const recentActivity = state.expenses.slice(0, 5);
 
+  // Get first name only
+  const firstName = (state.user.name || 'User').split(' ')[0];
+  // Greeting based on hour
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       return (
@@ -53,11 +62,55 @@ const Dashboard = () => {
 
   return (
     <div className="page-container">
-      <div className="page-header">
+
+      {/* ── Desktop page header ── */}
+      <div className="page-header mobile-hide">
         <h1 className="page-title">Dashboard</h1>
         <p className="page-subtitle">Welcome back, {state.user.name}</p>
       </div>
 
+      {/* ── Mobile top bar ── */}
+      <div className="dashboard-mobile-header desktop-hide">
+        <div>
+          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '2px' }}>{greeting},</p>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff', fontFamily: 'var(--font-display)' }}>{firstName} 👋</h2>
+        </div>
+        <button style={{ width: 38, height: 38, borderRadius: 12, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.10)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.7)', cursor: 'pointer' }}>
+          <Bell size={18} />
+        </button>
+      </div>
+
+      {/* ── Mobile hero balance card ── */}
+      <div className="dashboard-hero desktop-hide">
+        <div className="dashboard-hero-label">This Month's Spend</div>
+        <div className="dashboard-hero-amount">
+          <span>₹</span>{monthSpend.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        </div>
+        <div className="dashboard-hero-trend">
+          <TrendingUp size={11} /> Today ₹{todaysSpend.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+        </div>
+
+        <div className="dashboard-card-strip">
+          <span className="dashboard-card-dots">••••</span>
+          <span className="dashboard-card-number">•••• •••• 4209</span>
+          <span className="dashboard-card-brand">VISA</span>
+        </div>
+      </div>
+
+      {/* ── Mobile quick actions ── */}
+      <div className="dashboard-actions desktop-hide">
+        <Link to="/add" className="dashboard-action-btn">
+          <ArrowUpRight size={16} /> Add Expense
+        </Link>
+        <Link to="/history" className="dashboard-action-btn">
+          <Clock size={16} /> History
+        </Link>
+        <Link to="/reports" className="dashboard-action-btn">
+          <TrendingUp size={16} /> Reports
+        </Link>
+      </div>
+
+      {/* ── Stat cards ── */}
       <div className="dashboard-stats">
         <StatCard
           icon={IndianRupee}
@@ -68,27 +121,28 @@ const Dashboard = () => {
         />
         <StatCard
           icon={Wallet}
-          label="This Month's Spend"
+          label="This Month"
           value={formatCurrency(monthSpend)}
           color="cyan"
           delay={100}
         />
         <StatCard
           icon={ArrowDownLeft}
-          label="Total You're Owed"
+          label="Owed to You"
           value={formatCurrency(totalOwedToYou)}
           color="success"
           delay={200}
         />
         <StatCard
           icon={ArrowUpRight}
-          label="Total You Owe"
+          label="You Owe"
           value={formatCurrency(totalYouOwe)}
           color="danger"
           delay={300}
         />
       </div>
 
+      {/* ── Charts ── */}
       <div className="dashboard-charts">
         <div className="chart-card" style={{ animationDelay: '400ms' }}>
           <div className="chart-card-header">
@@ -174,9 +228,10 @@ const Dashboard = () => {
         </div>
       </div>
 
+      {/* ── Recent Activity ── */}
       <div className="dashboard-recent">
         <div className="dashboard-recent-header">
-          <h2 className="section-title" style={{ marginBottom: 0 }}>Recent Activity</h2>
+          <h2 className="section-title" style={{ marginBottom: 0 }}>Recent Transactions</h2>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             <Link to="/add" className="btn btn-primary btn-sm add-expense-btn">
               <Plus size={15} /> Add Expense
@@ -212,7 +267,7 @@ const Dashboard = () => {
                   </div>
                 </div>
                 <div className="recent-item-amount">
-                  {formatCurrency(expense.amount)}
+                  -{formatCurrency(expense.amount)}
                 </div>
               </div>
             ))

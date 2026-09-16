@@ -211,3 +211,45 @@
   .sidebar-toggle { display: flex; }
   .sidebar-overlay { display: block; }
 }
+
+/* ── Mobile Sidebar toggle redesign ── */
+@media (max-width: 768px) {
+  .sidebar-toggle {
+    background: rgba(14,29,58,0.95);
+    border-color: rgba(255,255,255,0.12);
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    top: 16px; left: 16px;
+  }
+
+  .sidebar {
+    background: rgba(8,18,42,0.98);
+    backdrop-filter: blur(28px);
+  }
+
+  .sidebar-logo {
+    background: linear-gradient(135deg, #1a4fd6, #0ea5e9);
+    box-shadow: 0 4px 14px rgba(26,79,214,0.45);
+  }
+
+  .sidebar-brand-name {
+    background: linear-gradient(135deg, #93c5fd, #67e8f9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .nav-item.active {
+    background: linear-gradient(135deg, rgba(26,79,214,0.20), rgba(14,165,233,0.12));
+    color: #93c5fd;
+    border-color: rgba(26,79,214,0.22);
+  }
+
+  .nav-item.active::before {
+    background: linear-gradient(180deg, #1a4fd6, #0ea5e9);
+  }
+
+  .sidebar-avatar {
+    background: linear-gradient(135deg, #1a4fd6, #0ea5e9);
+  }
+}

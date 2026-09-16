@@ -168,3 +168,79 @@
 @media (max-width: 480px) {
   .auth-card { padding: 36px 24px; border-radius: 24px; }
 }
+
+/* ── Mobile Auth redesign ── */
+@media (max-width: 768px) {
+  .auth-container {
+    background: #0a1628;
+    background-image:
+      radial-gradient(ellipse 120% 50% at 50% -10%, rgba(21,53,168,0.7) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 50% at 80% 110%, rgba(6,182,212,0.08) 0%, transparent 60%);
+    padding: 20px 16px;
+    align-items: flex-start;
+    padding-top: 60px;
+  }
+
+  .auth-container::before {
+    background: radial-gradient(circle, rgba(26,79,214,0.3) 0%, transparent 70%);
+  }
+
+  .auth-container::after {
+    background: radial-gradient(circle, rgba(14,165,233,0.15) 0%, transparent 70%);
+  }
+
+  .auth-card {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(30px);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 26px;
+    padding: 36px 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .auth-card::before {
+    background: linear-gradient(90deg, transparent, rgba(26,79,214,0.8), rgba(14,165,233,0.8), transparent);
+  }
+
+  .auth-logo {
+    background: linear-gradient(135deg, #1a4fd6, #0ea5e9);
+    box-shadow: 0 8px 24px rgba(26,79,214,0.45);
+  }
+
+  .auth-title { font-size: 1.5rem; color: #fff; }
+  .auth-subtitle { color: rgba(255,255,255,0.5); }
+
+  .auth-form .form-input {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.10);
+    border-radius: 14px;
+    color: #fff;
+    padding: 14px 16px;
+  }
+
+  .auth-form .form-input:focus {
+    background: rgba(26,79,214,0.12);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.18);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #1a4fd6 0%, #0ea5e9 100%);
+    box-shadow: 0 4px 18px rgba(26,79,214,0.45);
+    border-radius: 14px;
+  }
+
+  .btn-secondary {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.12);
+    border-radius: 14px;
+  }
+
+  .auth-divider { color: rgba(255,255,255,0.3); }
+  .auth-divider::before,
+  .auth-divider::after { background: rgba(255,255,255,0.08); }
+
+  .auth-toggle { color: rgba(255,255,255,0.5); }
+  .auth-link { color: #60a5fa; }
+  .auth-link:hover { color: #93c5fd; }
+}

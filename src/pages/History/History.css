@@ -64,3 +64,32 @@
   .data-table th:nth-child(1),
   .data-table td:nth-child(1) { display: none; }
 }
+
+/* ── Mobile History redesign ── */
+@media (max-width: 768px) {
+  .history-filters {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.08);
+    border-radius: 16px;
+    margin: 0 16px 16px;
+    padding: 14px;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .history-filters .form-group { min-width: 100%; }
+  .history-search { min-width: 100%; }
+
+  .action-btn {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.08);
+    border-radius: 8px;
+  }
+  .action-btn:hover {
+    background: rgba(255,255,255,0.10);
+  }
+  .action-btn.delete:hover {
+    background: rgba(239,68,68,0.12);
+    border-color: rgba(239,68,68,0.25);
+  }
+}

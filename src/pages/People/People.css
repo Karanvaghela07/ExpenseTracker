@@ -96,3 +96,24 @@
   .people-grid { grid-template-columns: 1fr; }
   .person-card { padding: 18px; }
 }
+
+/* ── Mobile People redesign ── */
+@media (max-width: 768px) {
+  .people-grid { padding: 0 16px; }
+
+  .person-card {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.09);
+    border-radius: 18px;
+  }
+
+  .person-card:hover { transform: none; box-shadow: none; }
+
+  .person-avatar {
+    background: linear-gradient(135deg, #1a4fd6, #0ea5e9);
+    box-shadow: 0 4px 14px rgba(26,79,214,0.35);
+  }
+
+  .person-card.owed-to-you::before { background: linear-gradient(180deg, #10b981, rgba(16,185,129,0.4)); }
+  .person-card.you-owe::before     { background: linear-gradient(180deg, #ef4444, rgba(239,68,68,0.4));  }
+}

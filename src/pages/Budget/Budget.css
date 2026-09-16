@@ -110,3 +110,38 @@
   .budget-list-card, .budget-form-card { padding: 20px; }
   .budget-input-wrapper { width: 130px; }
 }
+
+/* ── Mobile Budget redesign ── */
+@media (max-width: 768px) {
+  .budget-summary {
+    margin: 0 16px 16px;
+    background: linear-gradient(145deg, rgba(26,79,214,0.18), rgba(14,165,233,0.10));
+    border-color: rgba(26,79,214,0.25);
+    border-radius: 20px;
+  }
+
+  .budget-summary::before {
+    background: linear-gradient(90deg, #1a4fd6, #0ea5e9);
+  }
+
+  .budget-list-card, .budget-form-card {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.08);
+    border-radius: 18px;
+    margin: 0 16px 14px;
+    padding: 18px;
+  }
+
+  .budget-input-wrapper input {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.09);
+    color: #fff;
+    border-radius: 10px;
+  }
+
+  .budget-input-wrapper input:focus {
+    border-color: #3b82f6;
+    background: rgba(59,130,246,0.10);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.18);
+  }
+}
