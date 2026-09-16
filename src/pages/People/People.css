@@ -1,0 +1,98 @@
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+  margin-bottom: 32px;
+}
+
+.person-card {
+  background: rgba(13,20,40,0.55);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  padding: 22px;
+  transition: transform var(--t-spring), box-shadow var(--t-base), border-color var(--t-base);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.person-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(255,255,255,0.12);
+}
+
+/* left colour stripe */
+.person-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 0 3px 3px 0;
+  transition: background var(--t-base);
+}
+.person-card.owed-to-you::before { background: linear-gradient(180deg, var(--success), rgba(16,185,129,0.4)); }
+.person-card.you-owe::before     { background: linear-gradient(180deg, var(--danger),  rgba(239,68,68,0.4));  }
+
+.person-card-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 16px;
+}
+
+.person-avatar {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(124,58,237,0.35);
+}
+
+.person-name { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 700; color: var(--text-primary); }
+.person-transactions { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+.person-balance { margin-bottom: 16px; }
+.balance-amount {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.balance-status { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+
+.person-card-actions { display: flex; gap: 8px; }
+
+/* Transactions list in modal */
+.transactions-list {
+  max-height: 380px;
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.transaction-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 13px;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: background var(--t-fast);
+}
+.transaction-item:hover { background: rgba(255,255,255,0.055); }
+
+.transaction-note { font-weight: 600; color: var(--text-primary); font-size: var(--text-sm); }
+.transaction-meta { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+.transaction-amount-col { text-align: right; }
+.transaction-amount { font-family: var(--font-display); font-weight: 700; font-size: var(--text-sm); }
+.transaction-direction { font-size: 11px; margin-top: 2px; }
+
+@media (max-width: 480px) {
+  .people-grid { grid-template-columns: 1fr; }
+  .person-card { padding: 18px; }
+}

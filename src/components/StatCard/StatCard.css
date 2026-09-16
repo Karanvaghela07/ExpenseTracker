@@ -1,0 +1,86 @@
+.stat-card {
+  background: linear-gradient(145deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.015) 100%);
+  background-color: rgba(13,20,40,0.55);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 22px;
+  transition: transform var(--t-spring), box-shadow var(--t-base), border-color var(--t-base);
+  animation: slideUp 380ms ease-out both;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+
+/* subtle radial glow on hover from icon color */
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity var(--t-base);
+  pointer-events: none;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-glow);
+  border-color: rgba(124,58,237,0.22);
+}
+.stat-card:hover::before { opacity: 1; }
+
+/* colour tints per variant */
+.stat-card[data-color="violet"]::before  { background: radial-gradient(circle, rgba(124,58,237,0.25) 0%, transparent 70%); }
+.stat-card[data-color="cyan"]::before    { background: radial-gradient(circle, rgba(6,182,212,0.20) 0%, transparent 70%); }
+.stat-card[data-color="success"]::before { background: radial-gradient(circle, rgba(16,185,129,0.20) 0%, transparent 70%); }
+.stat-card[data-color="danger"]::before  { background: radial-gradient(circle, rgba(239,68,68,0.20) 0%, transparent 70%); }
+
+.stat-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.stat-card-icon {
+  width: 44px; height: 44px;
+  border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.stat-card-icon-violet      { background: rgba(124,58,237,0.18); color: #a78bfa; }
+.stat-card-icon-cyan        { background: rgba(6,182,212,0.18);  color: #67e8f9; }
+.stat-card-icon-success     { background: rgba(16,185,129,0.18); color: #34d399; }
+.stat-card-icon-danger      { background: rgba(239,68,68,0.18);  color: #f87171; }
+.stat-card-icon-warning     { background: rgba(245,158,11,0.18); color: #fbbf24; }
+.stat-card-icon-info        { background: rgba(59,130,246,0.18); color: #60a5fa; }
+
+.stat-card-value {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.stat-card-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.01em;
+}
+
+.stat-card-trend {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--r-full);
+}
+.stat-card-trend.up   { background: var(--danger-bg);  color: var(--danger); }
+.stat-card-trend.down { background: var(--success-bg); color: var(--success); }
+.stat-card-trend-label { font-size: 11px; color: var(--text-tertiary); margin-top: 4px; }
