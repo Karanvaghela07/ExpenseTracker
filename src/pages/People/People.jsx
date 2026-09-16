@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, Plus, Users } from 'lucide-react';
 import { useExpense } from '../../context/ExpenseContext';
 import { useToast } from '../../components/Toast/Toast';
 import Modal from '../../components/Modal/Modal';
 import {
   formatCurrency,
   calculateBalances,
-  formatDateShort
+  formatDateShort,
 } from '../../utils/helpers';
 import './People.css';
 
@@ -22,9 +23,12 @@ const People = () => {
 
   const peopleWithBalances = useMemo(() => {
     return calculateBalances(state.people, state.expenses).sort(
-      (a, b) => Math.abs(b.balance) - Math.abs(a.balance)
+      (a, b) => Math.abs(b.balance) - Math.abs(a.balance),
     );
   }, [state.people, state.expenses]);
+
+  const totalOwed = peopleWithBalances.filter((p) => p.balance > 0).reduce((s, p) => s + p.balance, 0);
+  const totalOwe = peopleWithBalances.filter((p) => p.balance < 0).reduce((s, p) => s + Math.abs(p.balance), 0);
 
   const handlePersonClick = (person) => {
     setSelectedPerson(person);
@@ -56,125 +60,136 @@ const People = () => {
 
   const getPersonTransactions = (personName) => {
     return state.expenses
-      .filter(e => e.isShared && e.sharedWith === personName)
+      .filter((e) => e.isShared && e.sharedWith === personName)
       .sort((a, b) => new Date(b.date) - new Date(a.date));
   };
 
   return (
-    <div className="page-container">
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div>
-          <h1 className="page-title">People & Balances</h1>
-          <p className="page-subtitle">Keep track of who owes who</p>
+    <div className="page-container bank-page">
+      <div className="bank-hero">
+        <div className="bank-topbar">
+          <button type="button" className="bank-icon-btn" onClick={() => navigate(-1)} aria-label="Back">
+            <ArrowLeft size={18} />
+          </button>
+          <button type="button" className="bank-icon-btn" onClick={() => navigate('/add')} aria-label="Add shared">
+            <Plus size={18} />
+          </button>
         </div>
-        <button className="btn btn-primary" onClick={() => navigate('/add')}>
-          Add Shared Expense
-        </button>
+        <h1 className="bank-hero-title">People</h1>
+        <p className="bank-hero-sub">Who owes who</p>
+        <div className="bank-hero-pills">
+          <span className="bank-hero-pill">Owed to you {formatCurrency(totalOwed)}</span>
+          <span className="bank-hero-pill">You owe {formatCurrency(totalOwe)}</span>
+        </div>
       </div>
 
-      <div className="people-grid">
-        {peopleWithBalances.length === 0 && (
-          <div style={{ color: 'var(--text-tertiary)', gridColumn: '1/-1', textAlign: 'center', padding: 'var(--space-xl)' }}>
-            No people yet. Add a shared expense to get started.
+      <div className="bank-sheet people-sheet">
+        <div className="bank-section-head">
+          <h2>Balances</h2>
+          <button type="button" className="people-add-link" onClick={() => navigate('/add')}>
+            Add shared
+          </button>
+        </div>
+
+        {peopleWithBalances.length === 0 ? (
+          <div className="people-empty">
+            <Users size={28} strokeWidth={1.5} />
+            <p>No people yet. Add a shared expense to get started.</p>
+            <button type="button" className="btn btn-primary" onClick={() => navigate('/add')}>
+              Add Shared Expense
+            </button>
+          </div>
+        ) : (
+          <div className="people-list">
+            {peopleWithBalances.map((person) => {
+              const isOwed = person.balance > 0;
+              const isOwe = person.balance < 0;
+              const isSettled = person.balance === 0;
+              let statusText = 'Settled up';
+              let statusClass = 'settled';
+              if (isOwed) { statusText = 'Owes you'; statusClass = 'owed'; }
+              if (isOwe) { statusText = 'You owe'; statusClass = 'owe'; }
+
+              return (
+                <button
+                  type="button"
+                  key={person.id}
+                  className="people-card"
+                  onClick={() => handlePersonClick(person)}
+                >
+                  <div className="people-avatar">{person.name.charAt(0).toUpperCase()}</div>
+                  <div className="people-info">
+                    <div className="people-name">{person.name}</div>
+                    <div className={`people-status ${statusClass}`}>{statusText}</div>
+                  </div>
+                  <div className="people-right">
+                    <div className={`people-amt ${statusClass}`}>
+                      {formatCurrency(Math.abs(person.balance))}
+                    </div>
+                    {!isSettled && (
+                      <span
+                        className="people-settle"
+                        onClick={(e) => handleSettleClick(person, e)}
+                        onKeyDown={() => {}}
+                        role="presentation"
+                      >
+                        Settle
+                      </span>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
           </div>
         )}
-        {peopleWithBalances.map(person => {
-          const isOwed = person.balance > 0;
-          const isOwe = person.balance < 0;
-          const isSettled = person.balance === 0;
-
-          let cardClass = 'person-card';
-          if (isOwed) cardClass += ' owed-to-you';
-          if (isOwe) cardClass += ' you-owe';
-
-          let statusText = 'Settled up';
-          let statusColor = 'var(--text-secondary)';
-          if (isOwed) { statusText = 'Owes you'; statusColor = 'var(--color-success)'; }
-          if (isOwe)  { statusText = 'You owe';  statusColor = 'var(--color-danger)'; }
-
-          return (
-            <div key={person.id} className={cardClass} onClick={() => handlePersonClick(person)}>
-              <div className="person-card-header">
-                <div className="person-avatar">{person.name.charAt(0).toUpperCase()}</div>
-                <div>
-                  <div className="person-name">{person.name}</div>
-                  <div className="person-transactions">{person.transactionCount} transactions</div>
-                </div>
-              </div>
-
-              <div className="person-balance">
-                <div className="balance-status" style={{ color: statusColor }}>{statusText}</div>
-                <div className="balance-amount" style={{ color: isSettled ? 'var(--text-primary)' : statusColor }}>
-                  {formatCurrency(Math.abs(person.balance))}
-                </div>
-              </div>
-
-              {!isSettled && (
-                <div className="person-card-actions">
-                  <button
-                    className="btn btn-secondary btn-sm"
-                    style={{ width: '100%' }}
-                    onClick={(e) => handleSettleClick(person, e)}
-                  >
-                    Settle Up
-                  </button>
-                </div>
-              )}
-            </div>
-          );
-        })}
       </div>
 
-      {/* Person Detail Modal */}
       {selectedPerson && (
         <Modal
           isOpen={detailModalOpen}
           onClose={() => setDetailModalOpen(false)}
-          title={`Transactions with ${selectedPerson.name}`}
-          footer={
+          title={`With ${selectedPerson.name}`}
+          footer={(
             <>
               {selectedPerson.balance !== 0 && (
                 <button
+                  type="button"
                   className="btn btn-primary"
                   onClick={() => { setDetailModalOpen(false); setSettleModalOpen(true); }}
                 >
                   Settle Up
                 </button>
               )}
-              <button className="btn btn-ghost" onClick={() => setDetailModalOpen(false)}>Close</button>
+              <button type="button" className="btn btn-ghost" onClick={() => setDetailModalOpen(false)}>Close</button>
             </>
-          }
+          )}
         >
-          <div className="person-balance" style={{ textAlign: 'center', marginBottom: 'var(--space-xl)', padding: 'var(--space-md)', background: 'var(--bg-surface)', borderRadius: 'var(--radius-md)' }}>
-            <div className="balance-status" style={{
-              color: selectedPerson.balance > 0 ? 'var(--color-success)' : selectedPerson.balance < 0 ? 'var(--color-danger)' : 'var(--text-secondary)'
-            }}>
+          <div className="people-modal-balance">
+            <div className="people-status">
               {selectedPerson.balance > 0 ? 'Owes you' : selectedPerson.balance < 0 ? 'You owe' : 'Settled up'}
             </div>
-            <div className="balance-amount" style={{
-              color: selectedPerson.balance > 0 ? 'var(--color-success)' : selectedPerson.balance < 0 ? 'var(--color-danger)' : 'var(--text-primary)'
-            }}>
+            <div className="people-modal-amt">
               {formatCurrency(Math.abs(selectedPerson.balance))}
             </div>
           </div>
 
-          <div className="transactions-list">
-            {getPersonTransactions(selectedPerson.name).map(t => {
+          <div className="people-txns">
+            {getPersonTransactions(selectedPerson.name).map((t) => {
               const amount = t.splitAmount || t.amount;
               const isYouPaid = t.whoPaid === 'I paid for them';
               return (
-                <div key={t.id} className="transaction-item" style={{ opacity: t.settledUp ? 0.5 : 1 }}>
-                  <div className="transaction-info">
-                    <div className="transaction-note">{t.note || t.category}</div>
-                    <div className="transaction-meta">{formatDateShort(t.date)} • {t.settledUp ? 'Settled' : 'Pending'}</div>
+                <div key={t.id} className="bank-row" style={{ opacity: t.settledUp ? 0.5 : 1 }}>
+                  <div className="bank-row-body">
+                    <div className="bank-row-title">{t.note || t.category}</div>
+                    <div className="bank-row-meta">
+                      {formatDateShort(t.date)} · {t.settledUp ? 'Settled' : 'Pending'}
+                    </div>
                   </div>
-                  <div className="transaction-amount-col">
-                    <div className="transaction-amount" style={{ color: isYouPaid ? 'var(--color-success)' : 'var(--color-danger)' }}>
+                  <div className="bank-row-right">
+                    <div className="bank-row-amt" style={{ color: isYouPaid ? '#10b981' : '#ef4444' }}>
                       {formatCurrency(amount)}
                     </div>
-                    <div className="transaction-direction" style={{ color: isYouPaid ? 'var(--color-success)' : 'var(--color-danger)' }}>
-                      {isYouPaid ? 'You lent' : 'You borrowed'}
-                    </div>
+                    <div className="bank-row-meta">{isYouPaid ? 'You lent' : 'You borrowed'}</div>
                   </div>
                 </div>
               );
@@ -183,29 +198,24 @@ const People = () => {
         </Modal>
       )}
 
-      {/* Settle Up Confirmation Modal */}
       {selectedPerson && (
         <Modal
           isOpen={settleModalOpen}
           onClose={() => setSettleModalOpen(false)}
           title="Confirm Settlement"
-          footer={
+          footer={(
             <>
-              <button className="btn btn-ghost" onClick={() => setSettleModalOpen(false)}>Cancel</button>
-              <button className="btn btn-primary" onClick={confirmSettle} disabled={isSettling}>
-                {isSettling ? 'Settling...' : 'Confirm Settlement'}
+              <button type="button" className="btn btn-ghost" onClick={() => setSettleModalOpen(false)}>Cancel</button>
+              <button type="button" className="btn btn-primary" onClick={confirmSettle} disabled={isSettling}>
+                {isSettling ? 'Settling...' : 'Confirm'}
               </button>
             </>
-          }
+          )}
         >
-          <div style={{ textAlign: 'center', padding: 'var(--space-md) 0' }}>
-            <p style={{ fontSize: 'var(--text-lg)', marginBottom: 'var(--space-md)' }}>
-              Mark <strong>{formatCurrency(Math.abs(selectedPerson.balance))}</strong> as settled with <strong>{selectedPerson.name}</strong>?
-            </p>
-            <p style={{ color: 'var(--text-tertiary)', fontSize: 'var(--text-sm)' }}>
-              This will mark all pending transactions with {selectedPerson.name} as settled.
-            </p>
-          </div>
+          <p style={{ textAlign: 'center', margin: 0 }}>
+            Mark <strong>{formatCurrency(Math.abs(selectedPerson.balance))}</strong> as settled with{' '}
+            <strong>{selectedPerson.name}</strong>?
+          </p>
         </Modal>
       )}
     </div>

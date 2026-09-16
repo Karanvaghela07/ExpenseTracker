@@ -1,83 +1,80 @@
 .bottom-nav {
   display: none;
   position: fixed;
-  bottom: 0; left: 0; right: 0;
-  height: var(--bottom-nav-height);
-  background: rgba(8,18,42,0.96);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border-top: 1px solid rgba(255,255,255,0.07);
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 900;
-  padding-bottom: env(safe-area-inset-bottom);
+
+  /* pill — slightly lighter than the soft page footer */
+  background: #eceef2;
+  border-radius: 999px;
+  box-shadow: 0 8px 30px rgba(15, 23, 41, 0.12), 0 2px 8px rgba(15, 23, 41, 0.06);
+  height: 62px;
+  padding: 0 6px;
+  width: auto;
+  min-width: 300px;
+
+  /* allow the active circle to overflow the pill vertically */
+  overflow: visible;
 }
 
 .bottom-nav-container {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   height: 100%;
-  padding: 0 8px;
+  gap: 0;
 }
 
+/* ── Every item ── */
 .bottom-nav-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  color: rgba(255,255,255,0.35);
+  /* make each slot square so the circle sits in the exact centre */
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
   text-decoration: none;
-  flex: 1;
-  height: 100%;
-  position: relative;
-  transition: color var(--t-base);
+  color: #8e98ab;
   -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+  position: relative;
+  transition: color 150ms;
 }
 
-.bottom-nav-icon {
-  transition: transform var(--t-spring);
+/* ── Active item ──
+   The circle is slightly taller than the pill (72px vs 62px)
+   so it protrudes 5px top and 5px bottom — exactly like the reference.   */
+.bottom-nav-item.active {
+  color: #ffffff;
+  /* bump up z so the circle draws on top of the pill edge */
+  z-index: 1;
+}
+
+/* ── Icon wrapper ── */
+.bottom-nav-icon-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  transition: background 200ms, box-shadow 200ms;
 }
 
-.bottom-nav-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  transition: opacity var(--t-fast);
+/* dark filled circle on the active item */
+.bottom-nav-icon-wrap.active-pill {
+  background: #1a1d27;
+  box-shadow: 0 4px 16px rgba(26,29,39,0.45);
+  width: 58px;
+  height: 58px;
 }
 
-.bottom-nav-item.active { color: #fff; }
-.bottom-nav-item.active .bottom-nav-icon { transform: translateY(-1px); }
+/* hide labels */
+.bottom-nav-label { display: none; }
 
-/* Active pill indicator */
-.bottom-nav-item.active::after {
-  content: '';
-  position: absolute;
-  bottom: 8px;
-  width: 18px; height: 3px;
-  border-radius: 99px;
-  background: linear-gradient(90deg, #1a4fd6, #0ea5e9);
-  box-shadow: 0 0 10px rgba(14,165,233,0.6);
+@media (max-width: 768px) {
+  .bottom-nav { display: block; }
 }
-
-/* Special FAB — center Add button */
-.bottom-nav-item.special { flex: 0 0 60px; }
-.bottom-nav-item.special .bottom-nav-icon {
-  width: 50px; height: 50px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #1a4fd6 0%, #0ea5e9 100%);
-  display: flex; align-items: center; justify-content: center;
-  color: white;
-  box-shadow: 0 4px 20px rgba(26,79,214,0.55);
-  transform: translateY(-14px);
-  border: 2.5px solid rgba(255,255,255,0.12);
-  transition: transform var(--t-spring), box-shadow var(--t-base);
-}
-.bottom-nav-item.special:active .bottom-nav-icon {
-  transform: translateY(-11px) scale(0.94);
-}
-.bottom-nav-item.special::after { display: none; }
-
-@media (max-width: 768px) { .bottom-nav { display: block; } }

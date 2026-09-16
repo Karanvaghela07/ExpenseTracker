@@ -155,6 +155,38 @@ body {
 
 #root { min-height: 100vh; }
 
+/* Auth / app loading screen — white banking theme */
+.auth-loader {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: #ffffff;
+}
+
+.auth-loader-spinner {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 3px solid #e8ecf4;
+  border-top-color: #1e4de0;
+  animation: auth-loader-spin 0.75s linear infinite;
+}
+
+.auth-loader-text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: #9aa3b8;
+}
+
+@keyframes auth-loader-spin {
+  to { transform: rotate(360deg); }
+}
+
 a { color: var(--text-accent); text-decoration: none; transition: color var(--t-fast); }
 a:hover { color: var(--accent-cyan-l); }
 
@@ -490,30 +522,380 @@ input, select, textarea { font-family: var(--font-body); outline: none; border: 
 
 @media (max-width: 768px) {
   .mobile-hide  { display: none !important; }
-  .desktop-hide { display: flex !important; }
+  /* mob-hero and mob-sheet are block; mob-topbar is flex — handle individually */
+  .desktop-hide { display: block !important; }
+  .mob-topbar,
+  .mob-actions  { display: flex !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BANKING UI — shared shell (hero + white sheet)
+═══════════════════════════════════════════════════════════ */
+.bank-page {
+  background: #ffffff;
+  min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  /* Reports has no page-container — keep nav clearance here */
+  .rpt-root {
+    padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.bank-hero {
+  background: linear-gradient(
+    180deg,
+    #06145c 0%,
+    #0d2a9e 32%,
+    #1538c4 62%,
+    #1e4de0 100%
+  );
+  border-radius: 0 0 40px 40px;
+  padding: 52px 22px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bank-hero::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -80px;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.07) 0%, transparent 68%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.bank-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+  position: relative;
+  z-index: 2;
+}
+
+.bank-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: background 150ms;
+}
+
+.bank-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.bank-hero-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.03em;
+  position: relative;
+  z-index: 2;
+}
+
+.bank-hero-sub {
+  margin: 6px 0 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.62);
+  position: relative;
+  z-index: 2;
+}
+
+.bank-hero-value {
+  margin-top: 18px;
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.bank-hero-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.bank-hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 99px;
+  background: rgba(8, 18, 55, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.bank-sheet {
+  background: #fff;
+  margin-top: -22px;
+  border-radius: 28px 28px 0 0;
+  padding: 28px 20px 28px;
+  position: relative;
+  z-index: 4;
+  min-height: unset;
+  box-shadow: none;
+}
+
+.bank-sheet .section-title,
+.bank-sheet h2,
+.bank-sheet h3 {
+  color: #0f1729;
+}
+
+.bank-sheet .form-label {
+  color: #6b7280;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.bank-sheet .form-input,
+.bank-sheet .form-select {
+  background: #f0f1f5;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  color: #0f1729;
+  box-shadow: none;
+}
+
+.bank-sheet .form-input:focus,
+.bank-sheet .form-select:focus {
+  background: #fff;
+  border-color: #2662e8;
+  box-shadow: 0 0 0 3px rgba(38, 98, 232, 0.15);
+}
+
+.bank-sheet .form-input::placeholder {
+  color: #9ca3af;
+}
+
+.bank-sheet .form-input:disabled {
+  opacity: 0.55;
+  color: #6b7280;
+}
+
+.bank-sheet .btn-secondary {
+  background: #f0f1f5;
+  border-color: transparent;
+  color: #111827;
+}
+
+.bank-sheet .btn-ghost {
+  color: #6b7280;
+}
+
+.bank-sheet .progress-bar {
+  background: #eef0f6;
+}
+
+.bank-muted {
+  color: #9aa3b8;
+  font-size: 13px;
+  text-align: center;
+  padding: 28px 8px;
+}
+
+.bank-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.bank-row:last-child {
+  border-bottom: none;
+}
+
+.bank-row-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #f0f2f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bank-row-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.bank-row-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f1729;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bank-row-meta {
+  font-size: 12px;
+  color: #9aa3b8;
+  margin-top: 3px;
+}
+
+.bank-row-right {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.bank-row-amt {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f1729;
+}
+
+.bank-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f0f1f5;
+  border-radius: 16px;
+  padding: 0 14px;
+  margin-bottom: 14px;
+}
+
+.bank-search svg {
+  color: #9aa3b8;
+  flex-shrink: 0;
+}
+
+.bank-search input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 14px 0;
+  font-size: 14px;
+  color: #0f1729;
+  outline: none;
+  font-family: var(--font-body);
+}
+
+.bank-filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin-bottom: 18px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bank-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.bank-chip,
+.bank-filters select {
+  flex-shrink: 0;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 99px;
+  border: none;
+  background: #f0f1f5;
+  color: #111827;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-body);
+}
+
+.bank-filters select {
+  appearance: none;
+  padding-right: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa3b8' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+.bank-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.bank-section-head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f1729;
+}
+
+@media (min-width: 769px) {
+  .bank-page {
+    max-width: 520px;
+    margin: 0 auto;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .bank-hero {
+    padding-top: 28px;
+    border-radius: 24px 24px 40px 40px;
+  }
+
+  .bank-sheet {
+    padding-bottom: 40px;
+    border-radius: 28px 28px 24px 24px;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
    MOBILE REDESIGN — Finance App Style
-   Inspired by: deep navy gradient, glass cards, clean layout
 ═══════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
 
-  /* ── Body & root ── */
+  /* ── Body & root — seamless white under floating nav ── */
   body {
-    background: #0a1628;
-    background-image:
-      radial-gradient(ellipse 100% 60% at 50% -5%, rgba(30,60,140,0.6) 0%, transparent 65%),
-      radial-gradient(ellipse 80% 50% at 80% 110%, rgba(6,182,212,0.08) 0%, transparent 60%);
-    background-attachment: fixed;
+    background: #ffffff;
+    background-image: none;
   }
 
-  /* ── Page container ── */
+  .layout,
+  .layout-content {
+    background: #ffffff;
+  }
+
+  /* ── Page container — padding bottom for floating pill nav ── */
   .page-container {
-    padding: 0 0 calc(var(--bottom-nav-height) + 28px);
-    animation: slideUp 320ms ease-out both;
+    padding: 0 0 100px;
+    animation: none;
+    background: #ffffff;
   }
-
   /* ── Page header ── */
   .page-header {
     padding: 20px 20px 12px;
@@ -619,5 +1001,29 @@ input, select, textarea { font-family: var(--font-body); outline: none; border: 
     padding-top: 10px;
     border-top: 1px solid rgba(255,255,255,0.06);
     margin-top: 8px;
+  }
+
+  /* Bank pages: override dark form tokens inside sheets */
+  .bank-sheet .form-input,
+  .bank-sheet .form-select {
+    background: #f0f1f5;
+    border-color: transparent;
+    color: #0f1729;
+  }
+  .bank-sheet .form-label { color: #6b7280; }
+  .bank-sheet .section-title { color: #0f1729; -webkit-text-fill-color: #0f1729; background: none; }
+  .bank-sheet .btn-secondary {
+    background: #f0f1f5;
+    border-color: transparent;
+    color: #111827;
+  }
+  .bank-sheet .progress-bar { background: #eef0f6; }
+
+  /* Soft seam: white content sits above the light footer */
+  .bank-sheet,
+  .mob-sheet,
+  .rpt-sheet {
+    margin-bottom: 0;
+    box-shadow: none;
   }
 }

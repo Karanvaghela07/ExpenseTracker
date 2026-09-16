@@ -1,52 +1,63 @@
 import { useState, useMemo } from 'react';
-import { Search, Edit2, Trash2, Check, X } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import {
+  Search, Edit2, Trash2, Check, X, ArrowLeft, Plus,
+  ShoppingBag, Heart, ShoppingCart, Coffee, Train,
+  Home, BookOpen, Utensils, Package,
+} from 'lucide-react';
 import { useExpense } from '../../context/ExpenseContext';
 import { useToast } from '../../components/Toast/Toast';
-import EmptyState from '../../components/EmptyState/EmptyState';
 import Modal from '../../components/Modal/Modal';
 import {
   formatCurrency,
-  formatDate,
+  formatDateShort,
   CATEGORIES,
   PAYMENT_METHODS,
-  getCategoryClass,
-  getToday,
+  getCategoryColor,
 } from '../../utils/helpers';
 import './History.css';
+
+const CAT_ICONS = {
+  Food: Utensils,
+  Travel: Train,
+  Groceries: ShoppingCart,
+  'Rent/Bills': Home,
+  Shopping: ShoppingBag,
+  Entertainment: Coffee,
+  Health: Heart,
+  Education: BookOpen,
+  Other: Package,
+};
 
 const History = () => {
   const { state, deleteExpense, editExpense } = useExpense();
   const { addToast } = useToast();
+  const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
   const [filterMethod, setFilterMethod] = useState('');
-  const [dateFrom, setDateFrom] = useState('');
-  const [dateTo, setDateTo] = useState('');
 
-  // Delete modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [expenseToDelete, setExpenseToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Inline edit state
   const [editingId, setEditingId] = useState(null);
   const [editFields, setEditFields] = useState({});
 
   const filteredExpenses = useMemo(() => {
-    return state.expenses.filter(expense => {
+    return state.expenses.filter((expense) => {
       const matchSearch =
         (expense.note || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
         expense.category.toLowerCase().includes(searchTerm.toLowerCase());
       const matchCategory = filterCategory ? expense.category === filterCategory : true;
       const matchMethod = filterMethod ? expense.paymentMethod === filterMethod : true;
-      const matchDateFrom = dateFrom ? new Date(expense.date) >= new Date(dateFrom) : true;
-      const matchDateTo = dateTo ? new Date(expense.date) <= new Date(dateTo) : true;
-      return matchSearch && matchCategory && matchMethod && matchDateFrom && matchDateTo;
+      return matchSearch && matchCategory && matchMethod;
     });
-  }, [state.expenses, searchTerm, filterCategory, filterMethod, dateFrom, dateTo]);
+  }, [state.expenses, searchTerm, filterCategory, filterMethod]);
 
-  // ── Delete ──────────────────────────────────────────────────────────────
+  const totalFiltered = filteredExpenses.reduce((s, e) => s + Number(e.amount), 0);
+
   const handleDeleteClick = (expense) => {
     setExpenseToDelete(expense);
     setDeleteModalOpen(true);
@@ -68,7 +79,6 @@ const History = () => {
     }
   };
 
-  // ── Inline Edit ──────────────────────────────────────────────────────────
   const startEdit = (expense) => {
     setEditingId(expense.id);
     setEditFields({
@@ -103,234 +113,155 @@ const History = () => {
   };
 
   return (
-    <div className="page-container">
-      <div className="page-header">
-        <h1 className="page-title">All Transactions</h1>
-        <p className="page-subtitle">View and manage your complete spending history</p>
+    <div className="page-container bank-page">
+      <div className="bank-hero">
+        <div className="bank-topbar">
+          <button type="button" className="bank-icon-btn" onClick={() => navigate(-1)} aria-label="Back">
+            <ArrowLeft size={18} />
+          </button>
+          <Link to="/add" className="bank-icon-btn" aria-label="Add expense">
+            <Plus size={18} />
+          </Link>
+        </div>
+        <h1 className="bank-hero-title">Transactions</h1>
+        <p className="bank-hero-sub">{filteredExpenses.length} entries · {formatCurrency(totalFiltered)}</p>
       </div>
 
-      <div className="history-filters">
-        <div className="history-search">
+      <div className="bank-sheet hist-sheet">
+        <div className="bank-search">
           <Search size={18} />
           <input
             type="text"
-            className="form-input"
-            placeholder="Search by note or category..."
+            placeholder="Search note or category..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
-        <div className="form-group">
-          <select
-            className="form-select"
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-          >
-            <option value="">All Categories</option>
-            {CATEGORIES.map(cat => (
+        <div className="bank-filters">
+          <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+            <option value="">All categories</option>
+            {CATEGORIES.map((cat) => (
               <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
-        </div>
-
-        <div className="form-group">
-          <select
-            className="form-select"
-            value={filterMethod}
-            onChange={(e) => setFilterMethod(e.target.value)}
-          >
-            <option value="">All Payment Methods</option>
-            {PAYMENT_METHODS.map(method => (
+          <select value={filterMethod} onChange={(e) => setFilterMethod(e.target.value)}>
+            <option value="">All methods</option>
+            {PAYMENT_METHODS.map((method) => (
               <option key={method} value={method}>{method}</option>
             ))}
           </select>
         </div>
 
-        <div className="form-group" style={{ display: 'flex', gap: '8px' }}>
-          <input
-            type="date"
-            className="form-input"
-            value={dateFrom}
-            onChange={(e) => setDateFrom(e.target.value)}
-            style={{ padding: '12px 8px' }}
-            title="From Date"
-          />
-          <input
-            type="date"
-            className="form-input"
-            value={dateTo}
-            onChange={(e) => setDateTo(e.target.value)}
-            style={{ padding: '12px 8px' }}
-            title="To Date"
-          />
-        </div>
-      </div>
+        <div className="hist-list">
+          {filteredExpenses.length === 0 ? (
+            <p className="bank-muted">No expenses match your filters.</p>
+          ) : (
+            filteredExpenses.map((expense) => {
+              const Icon = CAT_ICONS[expense.category] || Package;
+              const color = getCategoryColor(expense.category);
+              const isEditing = editingId === expense.id;
 
-      <div className="table-container">
-        {filteredExpenses.length > 0 ? (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Category</th>
-                <th>Note</th>
-                <th>Payment Method</th>
-                <th style={{ textAlign: 'right' }}>Amount</th>
-                <th style={{ textAlign: 'center' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredExpenses.map(expense => {
-                const isEditing = editingId === expense.id;
+              if (isEditing) {
                 return (
-                  <tr key={expense.id}>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          type="date"
-                          className="form-input"
-                          style={{ padding: '6px 8px', fontSize: '13px' }}
-                          value={editFields.date}
-                          onChange={(e) => setEditFields(f => ({ ...f, date: e.target.value }))}
-                        />
-                      ) : (
-                        formatDate(expense.date)
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
+                  <div key={expense.id} className="hist-edit-card">
+                    <div className="form-group">
+                      <label className="form-label">Amount</label>
+                      <input
+                        type="number"
+                        className="form-input"
+                        value={editFields.amount}
+                        onChange={(e) => setEditFields((f) => ({ ...f, amount: e.target.value }))}
+                        min="0"
+                        step="0.01"
+                      />
+                    </div>
+                    <div className="hist-edit-grid">
+                      <div className="form-group">
+                        <label className="form-label">Category</label>
                         <select
                           className="form-select"
-                          style={{ padding: '6px 8px', fontSize: '13px' }}
                           value={editFields.category}
-                          onChange={(e) => setEditFields(f => ({ ...f, category: e.target.value }))}
+                          onChange={(e) => setEditFields((f) => ({ ...f, category: e.target.value }))}
                         >
-                          {CATEGORIES.map(cat => (
+                          {CATEGORIES.map((cat) => (
                             <option key={cat} value={cat}>{cat}</option>
                           ))}
                         </select>
-                      ) : (
-                        <span className={`badge ${getCategoryClass(expense.category)}`}>
-                          {expense.category}
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          className="form-input"
-                          style={{ padding: '6px 8px', fontSize: '13px' }}
-                          value={editFields.note}
-                          onChange={(e) => setEditFields(f => ({ ...f, note: e.target.value }))}
-                          placeholder="Note"
-                        />
-                      ) : (
-                        <>
-                          <div style={{ fontWeight: 500 }}>{expense.note || '-'}</div>
-                          {expense.isShared && (
-                            <div style={{ fontSize: '10px', color: 'var(--text-tertiary)', marginTop: '2px' }}>
-                              Shared with {expense.sharedWith}
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <select
-                          className="form-select"
-                          style={{ padding: '6px 8px', fontSize: '13px' }}
-                          value={editFields.paymentMethod}
-                          onChange={(e) => setEditFields(f => ({ ...f, paymentMethod: e.target.value }))}
-                        >
-                          {PAYMENT_METHODS.map(m => (
-                            <option key={m} value={m}>{m}</option>
-                          ))}
-                        </select>
-                      ) : (
-                        expense.paymentMethod
-                      )}
-                    </td>
-                    <td style={{ textAlign: 'right', fontWeight: 600, fontFamily: 'var(--font-display)' }}>
-                      {isEditing ? (
-                        <input
-                          type="number"
-                          className="form-input"
-                          style={{ padding: '6px 8px', fontSize: '13px', textAlign: 'right', width: '100px' }}
-                          value={editFields.amount}
-                          onChange={(e) => setEditFields(f => ({ ...f, amount: e.target.value }))}
-                          min="0"
-                          step="0.01"
-                        />
-                      ) : (
-                        formatCurrency(expense.amount)
-                      )}
-                    </td>
-                    <td>
-                      <div className="action-btns" style={{ justifyContent: 'center' }}>
-                        {isEditing ? (
-                          <>
-                            <button
-                              className="action-btn"
-                              title="Save"
-                              onClick={() => saveEdit(expense.id)}
-                              style={{ color: 'var(--color-success)' }}
-                            >
-                              <Check size={14} />
-                            </button>
-                            <button
-                              className="action-btn"
-                              title="Cancel"
-                              onClick={cancelEdit}
-                              style={{ color: 'var(--color-danger)' }}
-                            >
-                              <X size={14} />
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <button
-                              className="action-btn"
-                              title="Edit"
-                              onClick={() => startEdit(expense)}
-                            >
-                              <Edit2 size={14} />
-                            </button>
-                            <button
-                              className="action-btn delete"
-                              title="Delete"
-                              onClick={() => handleDeleteClick(expense)}
-                            >
-                              <Trash2 size={14} />
-                            </button>
-                          </>
-                        )}
                       </div>
-                    </td>
-                  </tr>
+                      <div className="form-group">
+                        <label className="form-label">Date</label>
+                        <input
+                          type="date"
+                          className="form-input"
+                          value={editFields.date}
+                          onChange={(e) => setEditFields((f) => ({ ...f, date: e.target.value }))}
+                        />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Note</label>
+                      <input
+                        type="text"
+                        className="form-input"
+                        value={editFields.note}
+                        onChange={(e) => setEditFields((f) => ({ ...f, note: e.target.value }))}
+                      />
+                    </div>
+                    <div className="hist-edit-actions">
+                      <button type="button" className="btn btn-primary btn-sm" onClick={() => saveEdit(expense.id)}>
+                        <Check size={14} /> Save
+                      </button>
+                      <button type="button" className="btn btn-secondary btn-sm" onClick={cancelEdit}>
+                        <X size={14} /> Cancel
+                      </button>
+                    </div>
+                  </div>
                 );
-              })}
-            </tbody>
-          </table>
-        ) : (
-          <EmptyState message="No expenses found matching your filters. Try adjusting your search criteria." />
-        )}
+              }
+
+              return (
+                <div key={expense.id} className="bank-row">
+                  <div className="bank-row-icon" style={{ color }}>
+                    <Icon size={18} strokeWidth={1.75} />
+                  </div>
+                  <div className="bank-row-body">
+                    <div className="bank-row-title">{expense.note || expense.category}</div>
+                    <div className="bank-row-meta">
+                      {formatDateShort(expense.date)} · {expense.category}
+                      {expense.isShared ? ` · ${expense.sharedWith}` : ''}
+                    </div>
+                  </div>
+                  <div className="bank-row-right">
+                    <div className="bank-row-amt">−{formatCurrency(expense.amount)}</div>
+                    <div className="hist-row-actions">
+                      <button type="button" className="hist-icon-btn" onClick={() => startEdit(expense)} aria-label="Edit">
+                        <Edit2 size={13} />
+                      </button>
+                      <button type="button" className="hist-icon-btn danger" onClick={() => handleDeleteClick(expense)} aria-label="Delete">
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
       </div>
 
       <Modal
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         title="Delete Expense"
-        footer={
+        footer={(
           <>
-            <button className="btn btn-ghost" onClick={() => setDeleteModalOpen(false)}>Cancel</button>
-            <button className="btn btn-danger" onClick={confirmDelete} disabled={isDeleting}>
+            <button type="button" className="btn btn-ghost" onClick={() => setDeleteModalOpen(false)}>Cancel</button>
+            <button type="button" className="btn btn-danger" onClick={confirmDelete} disabled={isDeleting}>
               {isDeleting ? 'Deleting...' : 'Delete'}
             </button>
           </>
-        }
+        )}
       >
         Are you sure you want to delete this expense? This action cannot be undone.
       </Modal>

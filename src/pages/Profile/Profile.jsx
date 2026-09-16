@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { LogOut, Save } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { LogOut, Save, ArrowLeft } from 'lucide-react';
 import { useExpense } from '../../context/ExpenseContext';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../components/Toast/Toast';
@@ -9,20 +10,18 @@ const Profile = () => {
   const { state, updateUserProfile } = useExpense();
   const { logOut, changePassword, currentUser } = useAuth();
   const { addToast } = useToast();
+  const navigate = useNavigate();
 
   const [name, setName] = useState(state.user.name);
   const [currency, setCurrency] = useState(state.user.currency);
-
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
-
   const [isSaving, setIsSaving] = useState(false);
   const [isChangingPw, setIsChangingPw] = useState(false);
 
   const getInitials = (n) =>
-    (n || 'U').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+    (n || 'U').split(' ').map((w) => w[0]).join('').toUpperCase().slice(0, 2);
 
-  // Is this a Google / OAuth user? (no password to change)
   const isGoogleUser = currentUser?.providerData?.[0]?.providerId === 'google.com';
 
   const handleSaveProfile = async (e) => {
@@ -78,30 +77,31 @@ const Profile = () => {
   };
 
   return (
-    <div className="page-container profile-container">
-      <div className="page-header">
-        <h1 className="page-title">Profile Settings</h1>
-        <p className="page-subtitle">Manage your account preferences</p>
-      </div>
-
-      <div className="profile-header-card">
-        <div className="profile-avatar-large">
-          {getInitials(state.user.name)}
+    <div className="page-container bank-page">
+      <div className="bank-hero prof-hero">
+        <div className="bank-topbar">
+          <button type="button" className="bank-icon-btn" onClick={() => navigate(-1)} aria-label="Back">
+            <ArrowLeft size={18} />
+          </button>
+          <button type="button" className="bank-icon-btn" onClick={handleLogout} aria-label="Log out">
+            <LogOut size={18} />
+          </button>
         </div>
-        <div className="profile-info">
-          <h2>{state.user.name}</h2>
-          <p>{state.user.email}</p>
-          <div className="badge badge-success" style={{ marginTop: '8px' }}>
-            {isGoogleUser ? 'Google Account' : 'Email Account'}
+        <div className="prof-hero-user">
+          <div className="prof-avatar">{getInitials(state.user.name)}</div>
+          <h1 className="bank-hero-title">{state.user.name}</h1>
+          <p className="bank-hero-sub">{state.user.email}</p>
+          <div className="bank-hero-pills" style={{ justifyContent: 'center' }}>
+            <span className="bank-hero-pill">
+              {isGoogleUser ? 'Google Account' : 'Email Account'}
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Personal Information */}
-      <form className="settings-card" onSubmit={handleSaveProfile}>
-        <h3 className="settings-card-title">Personal Information</h3>
-
-        <div className="grid-2">
+      <div className="bank-sheet">
+        <form className="prof-card" onSubmit={handleSaveProfile}>
+          <h2 className="prof-card-title">Personal information</h2>
           <div className="form-group">
             <label className="form-label">Full Name</label>
             <input
@@ -112,47 +112,27 @@ const Profile = () => {
               required
             />
           </div>
-
           <div className="form-group">
-            <label className="form-label">Email Address</label>
-            <input
-              type="email"
-              className="form-input"
-              value={state.user.email}
-              disabled
-              style={{ opacity: 0.6, cursor: 'not-allowed' }}
-              title="Email cannot be changed here"
-            />
+            <label className="form-label">Email</label>
+            <input type="email" className="form-input" value={state.user.email} disabled />
           </div>
-
           <div className="form-group">
             <label className="form-label">Display Currency</label>
-            <select
-              className="form-select"
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-            >
+            <select className="form-select" value={currency} onChange={(e) => setCurrency(e.target.value)}>
               <option value="INR">₹ Indian Rupee (INR)</option>
               <option value="USD">$ US Dollar (USD)</option>
               <option value="EUR">€ Euro (EUR)</option>
               <option value="GBP">£ British Pound (GBP)</option>
             </select>
           </div>
-        </div>
-
-        <div style={{ marginTop: 'var(--space-lg)', display: 'flex', justifyContent: 'flex-end' }}>
-          <button type="submit" className="btn btn-primary" disabled={isSaving}>
+          <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={isSaving}>
             <Save size={16} /> {isSaving ? 'Saving...' : 'Save Changes'}
           </button>
-        </div>
-      </form>
+        </form>
 
-      {/* Password Change — only for email users */}
-      {!isGoogleUser && (
-        <form className="settings-card" onSubmit={handlePasswordChange}>
-          <h3 className="settings-card-title">Security</h3>
-
-          <div className="grid-2">
+        {!isGoogleUser && (
+          <form className="prof-card" onSubmit={handlePasswordChange}>
+            <h2 className="prof-card-title">Security</h2>
             <div className="form-group">
               <label className="form-label">Current Password</label>
               <input
@@ -163,7 +143,6 @@ const Profile = () => {
                 onChange={(e) => setCurrentPassword(e.target.value)}
               />
             </div>
-
             <div className="form-group">
               <label className="form-label">New Password</label>
               <input
@@ -175,29 +154,24 @@ const Profile = () => {
                 minLength={6}
               />
             </div>
-          </div>
-
-          <div style={{ marginTop: 'var(--space-lg)', display: 'flex', justifyContent: 'flex-end' }}>
             <button
               type="submit"
               className="btn btn-secondary"
+              style={{ width: '100%' }}
               disabled={isChangingPw || !currentPassword || !newPassword}
             >
               {isChangingPw ? 'Updating...' : 'Update Password'}
             </button>
-          </div>
-        </form>
-      )}
+          </form>
+        )}
 
-      {/* Logout */}
-      <div className="settings-card danger-zone">
-        <h3 className="settings-card-title">Danger Zone</h3>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: 'var(--space-md)', fontSize: 'var(--text-sm)' }}>
-          Once you log out, you will need to re-enter your credentials to access your data.
-        </p>
-        <button className="btn btn-danger" onClick={handleLogout}>
-          <LogOut size={16} /> Log Out
-        </button>
+        <div className="prof-card prof-danger">
+          <h2 className="prof-card-title">Log out</h2>
+          <p className="prof-danger-text">You&apos;ll need to sign in again to access your data.</p>
+          <button type="button" className="btn btn-danger" style={{ width: '100%' }} onClick={handleLogout}>
+            <LogOut size={16} /> Log Out
+          </button>
+        </div>
       </div>
     </div>
   );

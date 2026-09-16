@@ -1,40 +1,39 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, PlusCircle, Clock, Settings } from 'lucide-react';
+import { CreditCard, ArrowLeftRight, PieChart, LayoutPanelTop, LayoutGrid } from 'lucide-react';
 import './BottomNav.css';
 
 const navItems = [
-  { path: '/', icon: LayoutDashboard, label: 'Home' },
-  { path: '/history', icon: Clock, label: 'History' },
-  { path: '/add', icon: PlusCircle, label: 'Add', special: true },
-  { path: '/reports', icon: LayoutDashboard, label: 'Reports' }, // Reusing icon for simplicity, or we could use BarChart3
-  { path: '/profile', icon: Settings, label: 'Profile' },
+  { path: '/',        icon: CreditCard,     label: 'Home'    },
+  { path: '/history', icon: ArrowLeftRight, label: 'History' },
+  { path: '/reports', icon: PieChart,       label: 'Reports' },
+  { path: '/budget',  icon: LayoutPanelTop, label: 'Budget'  },
+  { path: '/people',  icon: LayoutGrid,     label: 'More'    },
 ];
 
-import { BarChart3 } from 'lucide-react';
-navItems[3].icon = BarChart3;
-
-const BottomNav = () => {
-  return (
-    <nav className="bottom-nav">
-      <div className="bottom-nav-container">
-        {navItems.map(item => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            end={item.path === '/'}
-            className={({ isActive }) => 
-              `bottom-nav-item ${isActive ? 'active' : ''} ${item.special ? 'special' : ''}`
-            }
-          >
-            <div className="bottom-nav-icon">
-              <item.icon size={item.special ? 24 : 20} />
+const BottomNav = () => (
+  <nav className="bottom-nav">
+    <div className="bottom-nav-container">
+      {navItems.map(item => (
+        <NavLink
+          key={item.path}
+          to={item.path}
+          end={item.path === '/'}
+          className={({ isActive }) =>
+            `bottom-nav-item${isActive ? ' active' : ''}`
+          }
+        >
+          {({ isActive }) => (
+            <div className={`bottom-nav-icon-wrap${isActive ? ' active-pill' : ''}`}>
+              <item.icon
+                size={isActive ? 22 : 20}
+                strokeWidth={isActive ? 2 : 1.6}
+              />
             </div>
-            {!item.special && <span className="bottom-nav-label">{item.label}</span>}
-          </NavLink>
-        ))}
-      </div>
-    </nav>
-  );
-};
+          )}
+        </NavLink>
+      ))}
+    </div>
+  </nav>
+);
 
 export default BottomNav;

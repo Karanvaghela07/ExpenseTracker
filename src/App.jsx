@@ -15,27 +15,9 @@ import Profile from './pages/Profile/Profile';
 
 // Show a full-screen loader while Firebase resolves the auth session
 const AuthLoader = () => (
-  <div style={{
-    minHeight: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    background: 'var(--bg-primary)',
-    color: 'var(--text-secondary)',
-    fontSize: 'var(--text-lg)',
-    flexDirection: 'column',
-    gap: '16px',
-  }}>
-    <div style={{
-      width: 40,
-      height: 40,
-      border: '3px solid var(--bg-surface)',
-      borderTop: '3px solid var(--accent-violet)',
-      borderRadius: '50%',
-      animation: 'spin 0.8s linear infinite',
-    }} />
-    Loading...
-    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+  <div className="auth-loader">
+    <div className="auth-loader-spinner" />
+    <p className="auth-loader-text">Loading...</p>
   </div>
 );
 

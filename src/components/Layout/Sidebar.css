@@ -205,11 +205,15 @@
 }
 .sidebar-overlay.visible { opacity: 1; pointer-events: all; }
 
+/* ── Mobile Sidebar toggle — HIDDEN on mobile (no hamburger on mobile) ── */
 @media (max-width: 768px) {
+  .sidebar-toggle {
+    display: none !important;
+  }
+
+  .sidebar-overlay { display: block; }
   .sidebar { transform: translateX(-100%); }
   .sidebar.open { transform: translateX(0); box-shadow: 20px 0 60px rgba(0,0,0,0.6); }
-  .sidebar-toggle { display: flex; }
-  .sidebar-overlay { display: block; }
 }
 
 /* ── Mobile Sidebar toggle redesign ── */
