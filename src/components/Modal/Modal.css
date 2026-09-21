@@ -194,22 +194,3 @@
     border-radius: 14px;
   }
 }
-
-  .modal-footer .btn {
-    width: 100%;
-    justify-content: center;
-    border-radius: 14px;
-  }
-
-  /* Primary button in modal — dark */
-  .modal-footer .btn-primary {
-    background: #1a1d27;
-    box-shadow: none;
-  }
-
-  /* Ghost button — visible on white */
-  .modal-footer .btn-ghost {
-    color: #6b7280;
-    background: #f4f5f9;
-  }
-}
