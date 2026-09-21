@@ -179,7 +179,6 @@ const People = () => {
                   Settle Up
                 </button>
               )}
-              <button type="button" className="btn btn-ghost" onClick={() => setDetailModalOpen(false)}>Close</button>
             </>
           )}
         >

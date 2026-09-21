@@ -127,7 +127,8 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #7dd3fc, #a78bfa 55%, #f0abfc);
+  background: rgba(255,255,255,0.18);
+  border: 1.5px solid rgba(255,255,255,0.30);
   display: flex;
   align-items: center;
   justify-content: center;

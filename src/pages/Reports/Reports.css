@@ -54,27 +54,33 @@
   position: relative; z-index: 3;
 }
 
-/* ── BUBBLES — absolute positioned mosaic ── */
+/* ── BUBBLES — responsive grid, no overlapping ── */
 .rpt-bubbles {
-  position: relative;
-  width: 100%;
-  height: 290px;
-  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px 20px;
+  position: relative; z-index: 2;
+  /* no fixed height — grows with content */
 }
 .rpt-empty {
-  position: absolute;
-  top: 50%; left: 50%; transform: translate(-50%,-50%);
   color: rgba(255,255,255,.5);
   font-size: 14px;
   text-align: center;
+  width: 100%;
+  padding: 40px 0;
 }
 .rpt-bubble {
-  position: absolute;
+  /* size is set inline but position is NOT absolute */
+  position: relative;
   border-radius: 50%;
   background: rgba(255,255,255,.10);
   border: 1px solid rgba(255,255,255,.16);
   backdrop-filter: blur(6px);
   display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
   animation: bubblePop 400ms cubic-bezier(.34,1.56,.64,1) both;
 }
 @keyframes bubblePop {
@@ -150,9 +156,45 @@
   color: #9aa3b8; letter-spacing: -.01em; line-height: 1;
 }
 
+/* ── My actual spend box ── */
+.rpt-actual-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8f5ff 100%);
+  border: 1.5px solid #d0e0ff;
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+.rpt-actual-left { flex: 1; }
+.rpt-actual-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1d27;
+}
+.rpt-actual-sub {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+.rpt-actual-right { text-align: right; }
+.rpt-actual-amt {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #1a4fd6;
+  letter-spacing: -0.02em;
+}
+.rpt-actual-owed {
+  font-size: 11px;
+  color: #10b981;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
 /* top-2 category tiles */
-.rpt-sheet-cats {
-  display: flex; gap: 0;
+.rpt-sheet-cats {  display: flex; gap: 0;
   border-top: 1px solid rgba(0,0,0,.06);
   border-bottom: 1px solid rgba(0,0,0,.06);
   padding: 14px 0;

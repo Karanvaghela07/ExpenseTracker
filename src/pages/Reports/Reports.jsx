@@ -40,14 +40,14 @@ const CAT_META = {
   Sport:         { icon: Dumbbell,     color: '#22c55e' },
 };
 
-/* Absolute bubble layout — mirrors the reference composition */
+/* Bubble sizes — largest category gets biggest circle */
 const BUBBLE_LAYOUT = [
-  { size: 132, top: '4%',  left: '6%'  },
-  { size: 96,  top: '2%',  left: '58%' },
-  { size: 118, top: '32%', left: '2%'  },
-  { size: 168, top: '22%', left: '42%' },
-  { size: 124, top: '58%', left: '10%' },
-  { size: 90,  top: '62%', left: '62%' },
+  { size: 140 },
+  { size: 110 },
+  { size: 125 },
+  { size: 150 },
+  { size: 115 },
+  { size: 100 },
 ];
 
 const formatParts = (amount) => {
@@ -75,6 +75,29 @@ const Reports = () => {
   const allCats = getTopCategories(state.expenses, 6);
   const top2 = getTopCategories(state.expenses, 2);
   const trend = getLast30DaysTrend(state.expenses);
+
+  // ── My actual personal spend ──
+  // total - what others owe me (I paid but they need to pay back)
+  const totalOwedToMe = useMemo(() => {
+    return state.expenses
+      .filter((e) => isThisMonth(e.date) && e.isShared && !e.settledUp)
+      .reduce((sum, e) => {
+        // New format: sum shareAmounts of all splitWith members
+        if (Array.isArray(e.splitWith) && e.splitWith.length > 0) {
+          const owedFromThis = e.splitWith
+            .filter((sw) => !sw.settledUp)
+            .reduce((s, sw) => s + (Number(sw.shareAmount) || 0), 0);
+          return sum + owedFromThis;
+        }
+        // Legacy: whoPaid = 'I paid for them' → splitAmount is what they owe
+        if (e.whoPaid === 'I paid for them') {
+          return sum + (Number(e.splitAmount) || 0);
+        }
+        return sum;
+      }, 0);
+  }, [state.expenses]);
+
+  const myActualSpend = Math.max(0, total - totalOwedToMe);
   const recent = useMemo(
     () => [...state.expenses]
       .filter((e) => isThisMonth(e.date))
@@ -142,8 +165,6 @@ const Reports = () => {
                   style={{
                     width: size,
                     height: size,
-                    top: layout.top,
-                    left: layout.left,
                     animationDelay: `${i * 80}ms`,
                   }}
                 >
@@ -183,6 +204,24 @@ const Reports = () => {
           <span className="rpt-total-symbol">{totalParts.symbol}</span>
           <span className="rpt-total-whole">{totalParts.whole}</span>
           <span className="rpt-total-frac">.{totalParts.frac}</span>
+        </div>
+
+        {/* ── My actual spend box ── */}
+        <div className="rpt-actual-box">
+          <div className="rpt-actual-left">
+            <div className="rpt-actual-label">My actual spend</div>
+            <div className="rpt-actual-sub">Total minus what others owe you</div>
+          </div>
+          <div className="rpt-actual-right">
+            <div className="rpt-actual-amt">
+              {formatCurrency(myActualSpend)}
+            </div>
+            {totalOwedToMe > 0 && (
+              <div className="rpt-actual-owed">
+                −{formatCurrency(totalOwedToMe)} owed back
+              </div>
+            )}
+          </div>
         </div>
 
         {/* top category tiles */}
