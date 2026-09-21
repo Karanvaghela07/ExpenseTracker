@@ -223,6 +223,12 @@ export const calculateBalances = (people, expenses) => {
     expenses.forEach((e) => {
       if (!e.isShared) return;
 
+      // ── Helper: did I (the app user) pay for this expense? ──
+      // whoPaid is either "I paid for them" OR "[PersonName] paid"
+      const iPaid = e.whoPaid === 'I paid for them';
+      // Did THIS specific person pay?
+      const personPaid = !iPaid && e.whoPaid?.toLowerCase().includes(person.name.toLowerCase());
+
       // ── New format: splitWith array ──
       if (Array.isArray(e.splitWith) && e.splitWith.length > 0) {
         const entry = e.splitWith.find(
@@ -232,16 +238,21 @@ export const calculateBalances = (people, expenses) => {
         transactionCount++;
         if (entry.settledUp || e.settledUp) return;
 
-        const share = Number(entry.shareAmount) || 0;
-        // "I paid for them" → they owe me their share → balance += share
-        // "Someone else paid" → I owe that person my share
-        if (e.whoPaid === 'I paid for them') {
-          balance += share;  // this person owes me
+        const theirShareInSplitWith = Number(entry.shareAmount) || 0;
+
+        if (iPaid) {
+          // I paid the bill → this person owes me their share
+          balance += theirShareInSplitWith;
+        } else if (personPaid) {
+          // THIS person paid the whole bill → I owe them MY share
+          // My share = total - sum of all others' shares in splitWith
+          const othersTotal = e.splitWith.reduce((s, sw) => s + (Number(sw.shareAmount) || 0), 0);
+          const myShare = Math.max(0, Number(e.amount) - othersTotal);
+          balance -= myShare;
         } else {
-          // they (or someone) paid — I owe the payer my share
-          // for the People page we show what THIS person owes/is owed
-          // if the person IS the payer, others owe them (but we track from "my" POV)
-          balance -= share;
+          // Someone else paid (not me, not this person) — not relevant for this person's balance with me
+          // But this person might still owe the payer — we don't track that here
+          return;
         }
         return;
       }
@@ -254,9 +265,9 @@ export const calculateBalances = (people, expenses) => {
 
       const splitAmount = e.splitAmount || Number(e.amount);
       if (e.whoPaid === 'I paid for them') {
-        balance += splitAmount;
+        balance += splitAmount;   // they owe me
       } else {
-        balance -= splitAmount;
+        balance -= splitAmount;   // I owe them
       }
     });
 

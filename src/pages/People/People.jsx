@@ -75,10 +75,18 @@ const People = () => {
 
   const getPersonShare = (expense, personName) => {
     if (Array.isArray(expense.splitWith) && expense.splitWith.length > 0) {
-      const entry = expense.splitWith.find(
-        (sw) => sw.name?.toLowerCase() === personName.toLowerCase()
-      );
-      return entry ? entry.shareAmount : expense.splitAmount || expense.amount;
+      const iPaid = expense.whoPaid === 'I paid for them';
+      if (iPaid) {
+        // I paid → show what this person owes me (their share)
+        const entry = expense.splitWith.find(
+          (sw) => sw.name?.toLowerCase() === personName.toLowerCase()
+        );
+        return entry ? Number(entry.shareAmount) : expense.splitAmount || expense.amount;
+      } else {
+        // They (or someone) paid → show MY share (what I owe)
+        const othersTotal = expense.splitWith.reduce((s, sw) => s + (Number(sw.shareAmount) || 0), 0);
+        return Math.max(0, Number(expense.amount) - othersTotal);
+      }
     }
     return expense.splitAmount || expense.amount;
   };
@@ -194,7 +202,10 @@ const People = () => {
           <div className="people-txns">
             {getPersonTransactions(selectedPerson.name).map((t) => {
               const amount = getPersonShare(t, selectedPerson.name);
-              const isYouPaid = t.whoPaid === 'I paid for them';
+              // iPaid = true means I paid → I lent money → they owe me
+              // iPaid = false means they (or someone) paid → I owe them
+              const iPaid = t.whoPaid === 'I paid for them';
+              const personPaid = !iPaid && t.whoPaid?.toLowerCase().includes(selectedPerson.name.toLowerCase());
               const isSettled = t.settledUp ||
                 (Array.isArray(t.splitWith) &&
                   t.splitWith.find((sw) => sw.name?.toLowerCase() === selectedPerson.name.toLowerCase())?.settledUp);
@@ -210,10 +221,12 @@ const People = () => {
                     </div>
                   </div>
                   <div className="bank-row-right">
-                    <div className="bank-row-amt" style={{ color: isYouPaid ? '#10b981' : '#ef4444' }}>
+                    <div className="bank-row-amt" style={{ color: iPaid ? '#10b981' : '#ef4444' }}>
                       {formatCurrency(amount)}
                     </div>
-                    <div className="bank-row-meta">{isYouPaid ? 'You lent' : 'You borrowed'}</div>
+                    <div className="bank-row-meta" style={{ color: iPaid ? '#10b981' : '#ef4444' }}>
+                      {iPaid ? 'You lent' : 'You owe'}
+                    </div>
                   </div>
                 </div>
               );
