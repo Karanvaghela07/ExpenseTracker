@@ -181,11 +181,77 @@ export const getMonthlyComparison = (expenses) => {
 
 // ── People / Balance Helpers ──────────────────────────
 export const calculateBalances = (people, expenses) => {
-  return people.map(person => {
-    const sharedExpenses = expenses.filter(e => e.isShared && e.sharedWith === person.name);
+  // Build a name → id map from existing people
+  const nameToId = {};
+  people.forEach((p) => { nameToId[p.name.toLowerCase()] = p.id; });
+
+  // Collect all unique person names from expenses (auto-populate People page)
+  const allPeopleFromExpenses = new Map();
+  people.forEach((p) => allPeopleFromExpenses.set(p.name.toLowerCase(), { id: p.id, name: p.name }));
+
+  expenses.forEach((e) => {
+    if (!e.isShared) return;
+    // New multi-person format
+    if (Array.isArray(e.splitWith) && e.splitWith.length > 0) {
+      e.splitWith.forEach((sw) => {
+        if (sw.name && !allPeopleFromExpenses.has(sw.name.toLowerCase())) {
+          allPeopleFromExpenses.set(sw.name.toLowerCase(), {
+            id: sw.personId || sw.name,
+            name: sw.name,
+          });
+        }
+      });
+    } else if (e.sharedWith) {
+      // Legacy: sharedWith can be a comma-separated string of names
+      const names = e.sharedWith.split(',').map((n) => n.trim()).filter(Boolean);
+      names.forEach((name) => {
+        if (!allPeopleFromExpenses.has(name.toLowerCase())) {
+          allPeopleFromExpenses.set(name.toLowerCase(), {
+            id: nameToId[name.toLowerCase()] || name,
+            name,
+          });
+        }
+      });
+    }
+  });
+
+  // Calculate balance per person
+  return Array.from(allPeopleFromExpenses.values()).map((person) => {
     let balance = 0;
-    sharedExpenses.forEach(e => {
+    let transactionCount = 0;
+
+    expenses.forEach((e) => {
+      if (!e.isShared) return;
+
+      // ── New format: splitWith array ──
+      if (Array.isArray(e.splitWith) && e.splitWith.length > 0) {
+        const entry = e.splitWith.find(
+          (sw) => sw.name?.toLowerCase() === person.name.toLowerCase()
+        );
+        if (!entry) return;
+        transactionCount++;
+        if (entry.settledUp || e.settledUp) return;
+
+        const share = Number(entry.shareAmount) || 0;
+        // "I paid for them" → they owe me their share → balance += share
+        // "Someone else paid" → I owe that person my share
+        if (e.whoPaid === 'I paid for them') {
+          balance += share;  // this person owes me
+        } else {
+          // they (or someone) paid — I owe the payer my share
+          // for the People page we show what THIS person owes/is owed
+          // if the person IS the payer, others owe them (but we track from "my" POV)
+          balance -= share;
+        }
+        return;
+      }
+
+      // ── Legacy format: single sharedWith string ──
+      const names = (e.sharedWith || '').split(',').map((n) => n.trim());
+      if (!names.some((n) => n.toLowerCase() === person.name.toLowerCase())) return;
+      transactionCount++;
       if (e.settledUp) return;
+
       const splitAmount = e.splitAmount || Number(e.amount);
       if (e.whoPaid === 'I paid for them') {
         balance += splitAmount;
@@ -193,8 +259,9 @@ export const calculateBalances = (people, expenses) => {
         balance -= splitAmount;
       }
     });
-    return { ...person, balance, transactionCount: sharedExpenses.length };
-  });
+
+    return { ...person, balance, transactionCount };
+  }).sort((a, b) => Math.abs(b.balance) - Math.abs(a.balance));
 };
 
 // ── ID Generator ──────────────────────────────────────

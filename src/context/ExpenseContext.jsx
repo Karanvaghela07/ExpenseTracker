@@ -159,13 +159,34 @@ export const ExpenseProvider = ({ children }) => {
     const uid = currentUser.uid;
     const batch = writeBatch(db);
 
-    // Mark all unsettled shared expenses with this person as settled
-    state.expenses
-      .filter((e) => e.isShared && e.sharedWith === personName && !e.settledUp)
-      .forEach((e) => {
+    state.expenses.forEach((e) => {
+      if (!e.isShared) return;
+
+      // New format: update settledUp inside splitWith array
+      if (Array.isArray(e.splitWith) && e.splitWith.length > 0) {
+        const idx = e.splitWith.findIndex(
+          (sw) => sw.name?.toLowerCase() === personName.toLowerCase() && !sw.settledUp
+        );
+        if (idx === -1) return;
+        const updatedSplitWith = e.splitWith.map((sw, i) =>
+          i === idx ? { ...sw, settledUp: true } : sw
+        );
+        const allSettled = updatedSplitWith.every((sw) => sw.settledUp);
         const ref = doc(db, 'users', uid, 'expenses', e.id);
-        batch.update(ref, { settledUp: true });
-      });
+        batch.update(ref, {
+          splitWith: updatedSplitWith,
+          settledUp: allSettled,
+        });
+        return;
+      }
+
+      // Legacy format
+      const names = (e.sharedWith || '').split(',').map((n) => n.trim());
+      if (!names.some((n) => n.toLowerCase() === personName.toLowerCase())) return;
+      if (e.settledUp) return;
+      const ref = doc(db, 'users', uid, 'expenses', e.id);
+      batch.update(ref, { settledUp: true });
+    });
 
     await batch.commit();
   };

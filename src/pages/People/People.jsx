@@ -60,8 +60,27 @@ const People = () => {
 
   const getPersonTransactions = (personName) => {
     return state.expenses
-      .filter((e) => e.isShared && e.sharedWith === personName)
+      .filter((e) => {
+        if (!e.isShared) return false;
+        // new format
+        if (Array.isArray(e.splitWith) && e.splitWith.length > 0) {
+          return e.splitWith.some((sw) => sw.name?.toLowerCase() === personName.toLowerCase());
+        }
+        // legacy
+        const names = (e.sharedWith || '').split(',').map((n) => n.trim());
+        return names.some((n) => n.toLowerCase() === personName.toLowerCase());
+      })
       .sort((a, b) => new Date(b.date) - new Date(a.date));
+  };
+
+  const getPersonShare = (expense, personName) => {
+    if (Array.isArray(expense.splitWith) && expense.splitWith.length > 0) {
+      const entry = expense.splitWith.find(
+        (sw) => sw.name?.toLowerCase() === personName.toLowerCase()
+      );
+      return entry ? entry.shareAmount : expense.splitAmount || expense.amount;
+    }
+    return expense.splitAmount || expense.amount;
   };
 
   return (
@@ -175,14 +194,20 @@ const People = () => {
 
           <div className="people-txns">
             {getPersonTransactions(selectedPerson.name).map((t) => {
-              const amount = t.splitAmount || t.amount;
+              const amount = getPersonShare(t, selectedPerson.name);
               const isYouPaid = t.whoPaid === 'I paid for them';
+              const isSettled = t.settledUp ||
+                (Array.isArray(t.splitWith) &&
+                  t.splitWith.find((sw) => sw.name?.toLowerCase() === selectedPerson.name.toLowerCase())?.settledUp);
               return (
-                <div key={t.id} className="bank-row" style={{ opacity: t.settledUp ? 0.5 : 1 }}>
+                <div key={t.id} className="bank-row" style={{ opacity: isSettled ? 0.5 : 1 }}>
                   <div className="bank-row-body">
                     <div className="bank-row-title">{t.note || t.category}</div>
                     <div className="bank-row-meta">
-                      {formatDateShort(t.date)} · {t.settledUp ? 'Settled' : 'Pending'}
+                      {formatDateShort(t.date)} · {isSettled ? 'Settled' : 'Pending'}
+                      {Array.isArray(t.splitWith) && t.splitWith.length > 1 && (
+                        <span> · {t.splitWith.length} people</span>
+                      )}
                     </div>
                   </div>
                   <div className="bank-row-right">

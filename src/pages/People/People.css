@@ -17,11 +17,7 @@
   color: #9aa3b8;
   text-align: center;
 }
-
-.people-empty p {
-  margin: 0 0 8px;
-  font-size: 14px;
-}
+.people-empty p { margin: 0 0 8px; font-size: 14px; }
 
 .people-list {
   display: flex;
@@ -42,61 +38,29 @@
   cursor: pointer;
   transition: background 150ms;
 }
-
-.people-card:active {
-  background: #eef0f6;
-}
+.people-card:active { background: #eef0f6; }
 
 .people-avatar {
-  width: 46px;
-  height: 46px;
+  width: 46px; height: 46px;
   border-radius: 50%;
   background: linear-gradient(145deg, #7dd3fc, #a78bfa);
   color: #fff;
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-weight: 800; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
 
-.people-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.people-name {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #0f1729;
-}
-
-.people-status {
-  font-size: 12px;
-  font-weight: 600;
-  margin-top: 2px;
-  color: #9aa3b8;
-}
-
+.people-info { flex: 1; min-width: 0; }
+.people-name { font-size: 0.95rem; font-weight: 700; color: #0f1729; }
+.people-status { font-size: 12px; font-weight: 600; margin-top: 2px; color: #9aa3b8; }
 .people-status.owed { color: #10b981; }
-.people-status.owe { color: #ef4444; }
+.people-status.owe  { color: #ef4444; }
 
-.people-right {
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.people-amt {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 800;
-  color: #0f1729;
-}
-
+.people-right { text-align: right; flex-shrink: 0; }
+.people-amt { font-family: var(--font-display); font-size: 1rem; font-weight: 800; color: #0f1729; }
 .people-amt.owed { color: #10b981; }
-.people-amt.owe { color: #ef4444; }
+.people-amt.owe  { color: #ef4444; }
 
 .people-settle {
   display: inline-block;
@@ -106,23 +70,86 @@
   color: #2662e8;
 }
 
+/* ── Modal content (inside white bottom sheet) ── */
+
+/* Balance summary box */
 .people-modal-balance {
   text-align: center;
-  padding: 16px;
-  background: #f7f8fc;
-  border-radius: 14px;
-  margin-bottom: 16px;
+  padding: 18px 16px;
+  background: #f5f7ff;
+  border: 1.5px solid #e0e7ff;
+  border-radius: 16px;
+  margin-bottom: 18px;
 }
+
+.people-modal-balance .people-status {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+.people-modal-balance .people-status.owed { color: #10b981; }
+.people-modal-balance .people-status.owe  { color: #ef4444; }
 
 .people-modal-amt {
   font-family: var(--font-display);
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: 900;
   color: #0f1729;
   margin-top: 4px;
+  letter-spacing: -0.03em;
 }
 
+/* Transaction list inside modal */
 .people-txns {
-  max-height: 280px;
+  max-height: 260px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Override bank-row styles inside the white modal */
+.people-txns .bank-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f2f6;
+}
+.people-txns .bank-row:last-child { border-bottom: none; }
+
+.people-txns .bank-row-body { flex: 1; min-width: 0; }
+
+.people-txns .bank-row-title {
+  font-size: 14px;
+  font-weight: 600;
+  /* Force dark text — was inheriting dark background color */
+  color: #0f1729 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.people-txns .bank-row-meta {
+  font-size: 11px;
+  color: #9aa3b8 !important;
+  margin-top: 2px;
+}
+
+.people-txns .bank-row-right {
+  text-align: right;
+  flex-shrink: 0;
+  padding-left: 12px;
+}
+
+.people-txns .bank-row-amt {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+/* bottom nav padding for people page */
+@media (max-width: 768px) {
+  .people-sheet { padding-bottom: 100px !important; }
 }
