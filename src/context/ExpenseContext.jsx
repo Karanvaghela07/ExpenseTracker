@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useEffect, useState } from 'react';
+import { createContext, useContext, useReducer, useEffect } from 'react';
 import {
   collection,
   doc,
@@ -7,7 +7,6 @@ import {
   deleteDoc,
   onSnapshot,
   setDoc,
-  getDoc,
   query,
   orderBy,
   serverTimestamp,
@@ -15,7 +14,6 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from './AuthContext';
-import { generateId } from '../utils/helpers';
 
 const ExpenseContext = createContext();
 

@@ -1,23 +1,13 @@
-.people-add-link {
-  border: none;
-  background: none;
-  color: #9aa3b8;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0;
+/* ── People Page ── */
+
+.people-root {
+  animation: fadeIn 0.4s ease-out;
 }
 
-.people-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 40px 16px;
-  color: #9aa3b8;
-  text-align: center;
+/* ── People List ── */
+.people-sheet {
+  padding-bottom: 24px;
 }
-.people-empty p { margin: 0 0 8px; font-size: 14px; }
 
 .people-list {
   display: flex;
@@ -25,131 +15,215 @@
   gap: 10px;
 }
 
+.people-add-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: #8b5cf6;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font-body);
+}
+
+.people-add-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Person Card ── */
 .people-card {
   display: flex;
   align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 16px;
-  background: #f7f8fc;
-  text-align: left;
+  gap: 14px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1.5px solid #e9edf5;
+  border-radius: 20px;
   cursor: pointer;
-  transition: background 150ms;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+  width: 100%;
+  font-family: var(--font-body);
 }
-.people-card:active { background: #eef0f6; }
 
+.people-card:hover {
+  background: #f1f5f9;
+  border-color: #8b5cf6;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.15);
+}
+
+.people-card:active {
+  transform: scale(0.99);
+}
+
+/* ── Avatar ── */
 .people-avatar {
-  width: 46px; height: 46px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #7dd3fc, #a78bfa);
-  color: #fff;
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-display);
-  font-weight: 800; font-size: 1rem;
-  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
   flex-shrink: 0;
 }
 
-.people-info { flex: 1; min-width: 0; }
-.people-name { font-size: 0.95rem; font-weight: 700; color: #0f1729; }
-.people-status { font-size: 12px; font-weight: 600; margin-top: 2px; color: #9aa3b8; }
-.people-status.owed { color: #10b981; }
-.people-status.owe  { color: #ef4444; }
+.people-info {
+  flex: 1;
+  min-width: 0;
+}
 
-.people-right { text-align: right; flex-shrink: 0; }
-.people-amt { font-family: var(--font-display); font-size: 1rem; font-weight: 800; color: #0f1729; }
-.people-amt.owed { color: #10b981; }
-.people-amt.owe  { color: #ef4444; }
+.people-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+  margin-bottom: 3px;
+}
 
-.people-settle {
-  display: inline-block;
-  margin-top: 4px;
-  font-size: 11px;
+/* ── Status Labels ── */
+.people-status {
+  font-size: 12px;
   font-weight: 700;
-  color: #2662e8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
-/* ── Modal content (inside white bottom sheet) ── */
+.people-status.owed    { color: #10b981; }
+.people-status.owe     { color: #f43f5e; }
+.people-status.settled { color: #94a3b8; }
 
-/* Balance summary box */
-.people-modal-balance {
-  text-align: center;
-  padding: 18px 16px;
-  background: #f5f7ff;
-  border: 1.5px solid #e0e7ff;
-  border-radius: 16px;
-  margin-bottom: 18px;
+/* ── Right side amount ── */
+.people-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
 }
 
-.people-modal-balance .people-status {
-  font-size: 13px;
-  font-weight: 600;
-  color: #6b7280;
-  margin-bottom: 4px;
-}
-.people-modal-balance .people-status.owed { color: #10b981; }
-.people-modal-balance .people-status.owe  { color: #ef4444; }
-
-.people-modal-amt {
+.people-amt {
   font-family: var(--font-display);
-  font-size: 2rem;
+  font-size: 18px;
   font-weight: 900;
-  color: #0f1729;
-  margin-top: 4px;
   letter-spacing: -0.03em;
 }
 
-/* Transaction list inside modal */
-.people-txns {
-  max-height: 260px;
-  overflow-y: auto;
+.people-amt.owed    { color: #10b981; }
+.people-amt.owe     { color: #f43f5e; }
+.people-amt.settled { color: #94a3b8; }
+
+.people-settle {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+
+.people-settle:hover {
+  background: rgba(139, 92, 246, 0.2);
+}
+
+/* ── Empty state ── */
+.people-empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: #94a3b8;
   display: flex;
   flex-direction: column;
-  gap: 0;
-}
-
-/* Override bank-row styles inside the white modal */
-.people-txns .bank-row {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #f0f2f6;
+  gap: 12px;
 }
-.people-txns .bank-row:last-child { border-bottom: none; }
 
-.people-txns .bank-row-body { flex: 1; min-width: 0; }
-
-.people-txns .bank-row-title {
+.people-empty p {
   font-size: 14px;
-  font-weight: 600;
-  /* Force dark text — was inheriting dark background color */
-  color: #0f1729 !important;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: #64748b;
 }
 
-.people-txns .bank-row-meta {
-  font-size: 11px;
-  color: #9aa3b8 !important;
-  margin-top: 2px;
+/* ── Modal detail ── */
+.people-modal-balance {
+  text-align: center;
+  padding: 16px 0 24px;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 16px;
 }
 
-.people-txns .bank-row-right {
-  text-align: right;
-  flex-shrink: 0;
-  padding-left: 12px;
-}
-
-.people-txns .bank-row-amt {
+.people-modal-amt {
   font-family: var(--font-display);
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-top: 6px;
 }
 
-/* bottom nav padding for people page */
-@media (max-width: 768px) {
-  .people-sheet { padding-bottom: 100px !important; }
+.people-txns {
+  display: flex;
+  flex-direction: column;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+/* Refined balances workspace */
+.people-root {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.people-sheet {
+  padding: 28px;
+}
+
+.people-card {
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.04);
+}
+
+.people-card:focus-visible,
+.people-add-link:focus-visible,
+.people-settle:focus-visible {
+  outline: 3px solid rgba(139, 92, 246, 0.3);
+  outline-offset: 3px;
+}
+
+.people-empty {
+  min-height: 260px;
+  justify-content: center;
+  border: 1px dashed #d8deea;
+  border-radius: 18px;
+  background: #fbfcff;
+}
+
+@media (max-width: 600px) {
+  .people-sheet {
+    padding: 20px 14px 24px;
+  }
+
+  .people-card {
+    padding: 13px;
+    gap: 10px;
+  }
+
+  .people-avatar {
+    width: 42px;
+    height: 42px;
+    font-size: 17px;
+  }
+
+  .people-name {
+    font-size: 14px;
+  }
+
+  .people-amt {
+    font-size: 15px;
+  }
 }

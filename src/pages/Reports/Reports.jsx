@@ -28,27 +28,17 @@ import {
 import './Reports.css';
 
 const CAT_META = {
-  Food:          { icon: Utensils,     color: '#f97316' },
-  Travel:        { icon: Train,        color: '#3b82f6' },
-  Groceries:     { icon: ShoppingCart, color: '#10b981' },
-  'Rent/Bills':  { icon: Home,         color: '#8b5cf6' },
-  Shopping:      { icon: ShoppingBag,  color: '#ec4899' },
-  Entertainment: { icon: Coffee,       color: '#f59e0b' },
-  Health:        { icon: Heart,        color: '#ef4444' },
-  Education:     { icon: BookOpen,     color: '#06b6d4' },
-  Other:         { icon: Package,      color: '#64748b' },
-  Sport:         { icon: Dumbbell,     color: '#22c55e' },
+  Food: { icon: Utensils, color: '#f97316' },
+  Travel: { icon: Train, color: '#3b82f6' },
+  Groceries: { icon: ShoppingCart, color: '#10b981' },
+  'Rent/Bills': { icon: Home, color: '#8b5cf6' },
+  Shopping: { icon: ShoppingBag, color: '#ec4899' },
+  Entertainment: { icon: Coffee, color: '#f59e0b' },
+  Health: { icon: Heart, color: '#ef4444' },
+  Education: { icon: BookOpen, color: '#06b6d4' },
+  Other: { icon: Package, color: '#64748b' },
+  Sport: { icon: Dumbbell, color: '#22c55e' },
 };
-
-/* Bubble sizes — largest category gets biggest circle */
-const BUBBLE_LAYOUT = [
-  { size: 140 },
-  { size: 110 },
-  { size: 125 },
-  { size: 150 },
-  { size: 115 },
-  { size: 100 },
-];
 
 const formatParts = (amount) => {
   const n = Math.max(0, Number(amount) || 0);
@@ -122,74 +112,28 @@ const Reports = () => {
   const isUp = pctChange > 0;
   const totalParts = formatParts(total);
 
-  const Circumference = 2 * Math.PI * 46;
-
   return (
     <div className="rpt-root bank-page">
-      {/* ── blue hero with bubbles ── */}
-      <div className="rpt-hero">
-        <div className="rpt-topbar">
-          <button type="button" className="rpt-icon-btn" onClick={() => navigate(-1)} aria-label="Back">
+      <div className="bank-hero rpt-bank-hero">
+        <div className="bank-topbar">
+          <button type="button" className="bank-icon-btn" onClick={() => navigate(-1)} aria-label="Back">
             <ArrowLeft size={18} />
           </button>
+          <h1 className="bank-hero-title">Reports</h1>
           <button
             type="button"
-            className="rpt-icon-btn"
+            className="bank-icon-btn"
             onClick={() => setShowMonth((v) => !v)}
-            aria-label="Period"
+            aria-label="Toggle reporting period"
           >
             <Calendar size={18} />
           </button>
         </div>
-
-        {showMonth && (
-          <div className="rpt-period">{monthLabel()}</div>
-        )}
-
-        <div className="rpt-bubbles">
-          {allCats.length === 0 ? (
-            <div className="rpt-empty">No spending data this month</div>
-          ) : (
-            allCats.map((cat, i) => {
-              const meta = CAT_META[cat.name] || CAT_META.Other;
-              const Icon = meta.icon;
-              const pct = total > 0 ? ((cat.value / total) * 100).toFixed(1) : '0.0';
-              const layout = BUBBLE_LAYOUT[i] || BUBBLE_LAYOUT[BUBBLE_LAYOUT.length - 1];
-              const size = layout.size;
-              const dash = total > 0 ? (cat.value / total) * Circumference : 0;
-
-              return (
-                <div
-                  key={cat.name}
-                  className="rpt-bubble"
-                  style={{
-                    width: size,
-                    height: size,
-                    animationDelay: `${i * 80}ms`,
-                  }}
-                >
-                  <svg className="rpt-bubble-arc" viewBox="0 0 100 100">
-                    <circle
-                      cx="50" cy="50" r="46" fill="none"
-                      stroke="rgba(255,255,255,0.16)" strokeWidth="3.5"
-                    />
-                    <circle
-                      cx="50" cy="50" r="46" fill="none"
-                      stroke="rgba(255,255,255,0.85)" strokeWidth="3.5"
-                      strokeDasharray={`${dash} ${Circumference}`}
-                      strokeLinecap="round"
-                      transform="rotate(-90 50 50)"
-                    />
-                  </svg>
-                  <div className="rpt-bubble-inner">
-                    <Icon size={size > 140 ? 28 : size > 110 ? 22 : 18} color="#fff" strokeWidth={1.5} />
-                    <span className="rpt-bubble-name">{cat.name}</span>
-                    <span className="rpt-bubble-pct">{pct}%</span>
-                  </div>
-                </div>
-              );
-            })
-          )}
+        <p className="bank-hero-sub">{showMonth ? monthLabel() : 'Monthly spending overview'}</p>
+        <div className="bank-hero-value">{formatCurrency(total)}</div>
+        <div className="bank-hero-pills">
+          <span className="bank-hero-pill">Daily avg {formatCurrency(avgDaily)}</span>
+          <span className="bank-hero-pill">{allCats.length} categories</span>
         </div>
       </div>
 

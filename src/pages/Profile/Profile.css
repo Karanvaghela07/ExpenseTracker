@@ -1,6 +1,12 @@
+/* ── Profile Page ── */
+
+.prof-root {
+  animation: fadeIn 0.4s ease-out;
+}
+
 .prof-hero {
   text-align: center;
-  padding-bottom: 48px;
+  padding-bottom: 32px;
 }
 
 .prof-hero .bank-topbar {
@@ -16,25 +22,27 @@
 }
 
 .prof-avatar {
-  width: 72px;
-  height: 72px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #7dd3fc, #a78bfa 55%, #f0abfc);
-  border: 3px solid rgba(255, 255, 255, 0.35);
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+  border: 3px solid rgba(255, 255, 255, 0.4);
   color: #fff;
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 14px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 12px 32px rgba(124, 58, 237, 0.5), 0 0 0 6px rgba(139, 92, 246, 0.15);
 }
 
+/* ── Profile Cards ── */
 .prof-card {
-  background: #f7f8fc;
-  border-radius: 18px;
+  background: #f8fafc;
+  border: 1px solid #e9edf5;
+  border-radius: 20px;
   padding: 20px;
   margin-bottom: 16px;
   display: flex;
@@ -47,15 +55,38 @@
   font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 800;
-  color: #0f1729;
+  color: #0f172a;
 }
 
 .prof-danger-text {
   margin: 0;
   font-size: 13px;
-  color: #9aa3b8;
+  color: #94a3b8;
 }
 
 .prof-card .form-group {
   margin: 0;
+}
+
+/* ── Intro Link ── */
+.prof-intro-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(99, 102, 241, 0.08) 100%);
+  border: 1.5px solid rgba(139, 92, 246, 0.2);
+  border-radius: 18px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #6d28d9;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+}
+
+.prof-intro-link:hover {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.14) 0%, rgba(99, 102, 241, 0.14) 100%);
+  transform: translateY(-2px);
 }

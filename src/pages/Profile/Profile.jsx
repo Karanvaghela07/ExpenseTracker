@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, Save, ArrowLeft } from 'lucide-react';
 import { useExpense } from '../../context/ExpenseContext';
@@ -18,6 +18,11 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [isChangingPw, setIsChangingPw] = useState(false);
+
+  useEffect(() => {
+    setName(state.user.name);
+    setCurrency(state.user.currency);
+  }, [state.user.name, state.user.currency]);
 
   const getInitials = (n) =>
     (n || 'U').split(' ').map((w) => w[0]).join('').toUpperCase().slice(0, 2);
@@ -77,7 +82,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="page-container bank-page">
+    <div className="prof-root">
       <div className="bank-hero prof-hero">
         <div className="bank-topbar">
           <button type="button" className="bank-icon-btn" onClick={() => navigate(-1)} aria-label="Back">

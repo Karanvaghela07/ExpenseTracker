@@ -1,15 +1,26 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AlertTriangle, ArrowLeft, Wallet } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, Wallet, ShoppingBag, Heart, ShoppingCart, Coffee, Train, Home, BookOpen, Utensils, Package } from 'lucide-react';
 import { useExpense } from '../../context/ExpenseContext';
 import { useToast } from '../../components/Toast/Toast';
 import {
   formatCurrency,
   CATEGORIES,
-  getCategoryClass,
   isThisMonth,
 } from '../../utils/helpers';
 import './Budget.css';
+
+const CAT_META = {
+  Food:          { icon: Utensils,    color: '#f97316', bg: 'rgba(249,115,22,0.15)' },
+  Travel:        { icon: Train,       color: '#0ea5e9', bg: 'rgba(56,189,248,0.15)' },
+  Groceries:     { icon: ShoppingCart,color: '#10b981', bg: 'rgba(16,185,129,0.15)' },
+  'Rent/Bills':  { icon: Home,        color: '#8b5cf6', bg: 'rgba(139,92,246,0.15)' },
+  Shopping:      { icon: ShoppingBag, color: '#ec4899', bg: 'rgba(236,72,153,0.15)' },
+  Entertainment: { icon: Coffee,      color: '#f59e0b', bg: 'rgba(245,158,11,0.15)' },
+  Health:        { icon: Heart,       color: '#f43f5e', bg: 'rgba(244,63,94,0.15)' },
+  Education:     { icon: BookOpen,    color: '#06b6d4', bg: 'rgba(6,182,212,0.15)'  },
+  Other:         { icon: Package,     color: '#64748b', bg: 'rgba(100,116,139,0.15)'},
+};
 
 const Budget = () => {
   const { state, saveBudgets } = useExpense();
@@ -37,6 +48,8 @@ const Budget = () => {
   const remaining = totalBudget - totalSpent;
   const usedPct = totalBudget > 0 ? Math.min((totalSpent / totalBudget) * 100, 100) : 0;
 
+  const overallStatus = usedPct >= 100 ? 'danger' : usedPct >= 80 ? 'warning' : 'safe';
+
   const handleBudgetChange = (category, value) => {
     setBudgets((prev) => ({
       ...prev,
@@ -62,19 +75,23 @@ const Budget = () => {
     }
   };
 
+  const activeCats = CATEGORIES.filter((cat) => (budgets[cat] || 0) > 0 || categorySpending[cat] > 0);
+
   return (
-    <div className="page-container bank-page">
+    <div className="budg-root">
+      {/* ── Hero ── */}
       <div className="bank-hero">
         <div className="bank-topbar">
           <button type="button" className="bank-icon-btn" onClick={() => navigate(-1)} aria-label="Back">
             <ArrowLeft size={18} />
           </button>
-          <div className="bank-icon-btn" aria-hidden="true">
+          <h1 className="bank-hero-title">Budget</h1>
+          <div className="bank-icon-btn" aria-hidden="true" style={{ pointerEvents: 'none' }}>
             <Wallet size={18} />
           </div>
         </div>
-        <h1 className="bank-hero-title">Budget</h1>
-        <p className="bank-hero-sub">This month&apos;s limits &amp; pacing</p>
+
+        <p className="bank-hero-sub">This month's limits & pacing</p>
         <div className="bank-hero-value">{formatCurrency(totalBudget)}</div>
         <div className="bank-hero-pills">
           <span className="bank-hero-pill">Spent {formatCurrency(totalSpent)}</span>
@@ -85,66 +102,82 @@ const Budget = () => {
       </div>
 
       <div className="bank-sheet budg-sheet">
+        {/* Overall Overview */}
         <div className="budg-overview">
           <div className="budg-overview-top">
-            <span>Overall progress</span>
-            <span>{Math.round(usedPct)}%</span>
+            <span className="budg-overview-label">Overall Progress</span>
+            <span className={`budg-overview-pct ${overallStatus}`}>{Math.round(usedPct)}%</span>
           </div>
           <div className="progress-bar budg-bar">
             <div
-              className={`progress-bar-fill ${totalSpent > totalBudget ? 'danger' : totalSpent > totalBudget * 0.8 ? 'warning' : ''}`}
+              className={`progress-bar-fill ${overallStatus === 'danger' ? 'danger' : overallStatus === 'warning' ? 'warning' : ''}`}
               style={{ width: `${usedPct}%` }}
             />
           </div>
+          <div className="budg-overview-sub">
+            <span>🏦 Budget: {formatCurrency(totalBudget)}</span>
+            <span>·</span>
+            <span>💳 Spent: {formatCurrency(totalSpent)}</span>
+          </div>
         </div>
 
-        <div className="bank-section-head">
-          <h2>Category progress</h2>
-        </div>
+        {/* Category Progress */}
+        {activeCats.length > 0 && (
+          <>
+            <div className="bank-section-head">
+              <h2>Category Progress</h2>
+            </div>
+            <div className="budg-list">
+              {activeCats.map((cat) => {
+                const meta = CAT_META[cat] || CAT_META.Other;
+                const CatIcon = meta.icon;
+                const spent = categorySpending[cat];
+                const limit = budgets[cat] || 0;
+                const percent = limit > 0 ? (spent / limit) * 100 : spent > 0 ? 100 : 0;
+                const isWarning = percent >= 80 && percent < 100;
+                const isDanger = percent >= 100;
 
-        <div className="budg-list">
-          {CATEGORIES.map((cat) => {
-            const spent = categorySpending[cat];
-            const limit = state.budgets[cat] || 0;
-            const percent = limit > 0 ? (spent / limit) * 100 : spent > 0 ? 100 : 0;
-            const isWarning = percent >= 80 && percent < 100;
-            const isDanger = percent >= 100;
-            if (limit === 0 && spent === 0) return null;
-
-            return (
-              <div key={cat} className="budg-item">
-                <div className="budg-item-header">
-                  <span className={`badge ${getCategoryClass(cat)}`}>{cat}</span>
-                  <div className="budg-item-amounts">
-                    <span className="budg-spent">{formatCurrency(spent)}</span>
-                    <span className="budg-limit"> / {formatCurrency(limit)}</span>
+                return (
+                  <div key={cat} className="budg-item">
+                    <div className="budg-item-header">
+                      <div className="budg-item-cat">
+                        <div className="budg-item-icon" style={{ background: meta.bg, color: meta.color }}>
+                          <CatIcon size={16} />
+                        </div>
+                        <span className="budg-item-name">{cat}</span>
+                      </div>
+                      <div className="budg-item-amounts">
+                        <span className="budg-spent">{formatCurrency(spent)}</span>
+                        <span className="budg-limit"> / {formatCurrency(limit)}</span>
+                      </div>
+                    </div>
+                    <div className="progress-bar">
+                      <div
+                        className={`progress-bar-fill ${isDanger ? 'danger' : isWarning ? 'warning' : ''}`}
+                        style={{ width: `${Math.min(percent, 100)}%` }}
+                      />
+                    </div>
+                    {isWarning && (
+                      <div className="budg-warn warning">
+                        <AlertTriangle size={12} /> {Math.round(percent)}% used — almost there!
+                      </div>
+                    )}
+                    {isDanger && limit > 0 && (
+                      <div className="budg-warn danger">
+                        <AlertTriangle size={12} /> Over by {formatCurrency(spent - limit)}
+                      </div>
+                    )}
                   </div>
-                </div>
-                <div className="progress-bar">
-                  <div
-                    className={`progress-bar-fill ${isDanger ? 'danger' : isWarning ? 'warning' : ''}`}
-                    style={{ width: `${Math.min(percent, 100)}%` }}
-                  />
-                </div>
-                {isWarning && (
-                  <div className="budg-warn warning">
-                    <AlertTriangle size={12} /> {Math.round(percent)}% used
-                  </div>
-                )}
-                {isDanger && limit > 0 && (
-                  <div className="budg-warn danger">
-                    <AlertTriangle size={12} /> Over by {formatCurrency(spent - limit)}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+                );
+              })}
+            </div>
+          </>
+        )}
 
-        <div className="bank-section-head" style={{ marginTop: 28 }}>
-          <h2>Edit budgets</h2>
+        {/* Edit Budgets Form */}
+        <div className="bank-section-head" style={{ marginTop: 24 }}>
+          <h2>Set Monthly Budgets</h2>
         </div>
-
         <form onSubmit={handleSaveBudget} className="budg-form">
           <div className="budg-form-grid">
             {CATEGORIES.map((cat) => (
@@ -164,8 +197,13 @@ const Budget = () => {
               </div>
             ))}
           </div>
-          <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }} disabled={isSaving}>
-            {isSaving ? 'Saving...' : 'Save Budgets'}
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{ width: '100%', padding: '14px', fontSize: 15 }}
+            disabled={isSaving}
+          >
+            {isSaving ? 'Saving…' : '💾 Save Budgets'}
           </button>
         </form>
       </div>

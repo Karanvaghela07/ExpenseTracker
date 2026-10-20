@@ -31,7 +31,10 @@ export const formatDateShort = (dateStr) => {
 };
 
 export const getToday = () => {
-  return new Date().toISOString().split('T')[0];
+  const now = new Date();
+  const offset = now.getTimezoneOffset();
+  const localDate = new Date(now.getTime() - offset * 60 * 1000);
+  return localDate.toISOString().split('T')[0];
 };
 
 export const isToday = (dateStr) => {

@@ -1,36 +1,210 @@
-.hist-list {
+/* ── History Page ── */
+
+.hist-root {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.hist-hero {
+  padding-bottom: 20px;
+}
+
+.hist-hero-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.015em;
+}
+
+.hist-hero-summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 18px;
+  padding: 14px 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+}
+
+.hist-summary-item {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.hist-summary-value {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.hist-summary-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.hist-summary-divider {
+  width: 1px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Grouped List ── */
+.hist-sheet {
+  padding-bottom: 24px;
+}
+
+.hist-grouped-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hist-date-group {
+  margin-bottom: 12px;
+}
+
+.hist-date-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 6px;
+}
+
+.hist-date-total {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.hist-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 4px;
+  border-radius: 14px;
+  transition: background 0.15s;
+}
+
+.hist-row:hover {
+  background: #f8fafc;
+}
+
+.hist-row-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hist-row-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.hist-row-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.hist-row-meta {
+  font-size: 12px;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.hist-shared-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  background: rgba(139, 92, 246, 0.12);
+  color: #8b5cf6;
+}
+
+.hist-row-right {
+  text-align: right;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.hist-row-amt {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  color: #f43f5e;
 }
 
 .hist-row-actions {
   display: flex;
-  justify-content: flex-end;
   gap: 4px;
-  margin-top: 6px;
 }
 
 .hist-icon-btn {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: none;
-  background: #f0f1f5;
-  color: #6b7280;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: all 0.15s;
+}
+
+.hist-icon-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
 }
 
 .hist-icon-btn.danger {
-  color: #ef4444;
+  color: #f43f5e;
 }
 
+.hist-icon-btn.danger:hover {
+  background: rgba(244, 63, 94, 0.08);
+  border-color: rgba(244, 63, 94, 0.2);
+}
+
+/* ── Edit Card ── */
 .hist-edit-card {
-  background: #f7f8fc;
-  border-radius: 16px;
-  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 18px;
   margin-bottom: 12px;
   display: flex;
   flex-direction: column;
@@ -46,4 +220,96 @@
 .hist-edit-actions {
   display: flex;
   gap: 8px;
+}
+
+/* ── Empty State ── */
+.hist-empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: #94a3b8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.hist-empty p {
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* Refined transaction workspace */
+.hist-root {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.hist-sheet {
+  padding: 28px;
+}
+
+.hist-date-group {
+  padding: 6px 8px 10px;
+  border: 1px solid #edf0f6;
+  border-radius: 18px;
+  margin-bottom: 14px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+}
+
+.hist-date-label {
+  padding: 10px 8px;
+  border-bottom-color: #edf0f6;
+}
+
+.hist-row {
+  padding: 13px 8px;
+}
+
+.hist-row:hover {
+  background: #f4f6ff;
+}
+
+.hist-row-amt {
+  font-size: 15px;
+}
+
+.hist-empty {
+  min-height: 260px;
+  justify-content: center;
+  border: 1px dashed #d8deea;
+  border-radius: 18px;
+  background: #fbfcff;
+}
+
+@media (max-width: 600px) {
+  .hist-sheet {
+    padding: 20px 14px 24px;
+  }
+
+  .hist-filters,
+  .bank-filters {
+    gap: 8px;
+  }
+
+  .hist-row {
+    gap: 9px;
+  }
+
+  .hist-row-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  .hist-row-title {
+    font-size: 14px;
+  }
+
+  .hist-row-meta {
+    flex-wrap: wrap;
+  }
+
+  .hist-edit-grid {
+    grid-template-columns: 1fr;
+  }
 }

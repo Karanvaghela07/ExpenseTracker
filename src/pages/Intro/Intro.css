@@ -1,0 +1,174 @@
+/* ══════════════════════════════════════
+   Intro — exact same style as Auth page
+══════════════════════════════════════ */
+
+.intro-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* EXACT same gradient as Auth page */
+  background: radial-gradient(circle at 50% 0%, #1d4ed8 0%, #0a1a6a 38%, #060616 78%);
+  color: #fff;
+  user-select: none;
+}
+
+/* EXACT same glows as Auth page */
+.intro-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+}
+.intro-glow-a {
+  width: 420px; height: 420px;
+  top: -80px; left: 50%;
+  transform: translateX(-50%);
+  background: rgba(37, 99, 235, 0.7);
+}
+.intro-glow-b {
+  width: 320px; height: 320px;
+  bottom: -80px; right: -40px;
+  background: rgba(14, 165, 233, 0.28);
+}
+
+/* top bar */
+.intro-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 52px 24px 0;
+  position: relative; z-index: 2;
+}
+
+/* exact same chip style as Auth page */
+.intro-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+}
+.intro-chip-btn {
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.intro-chip-btn:hover { opacity: .7; }
+
+/* main center content */
+.intro-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 32px;
+  text-align: center;
+  position: relative; z-index: 2;
+  gap: 20px;
+  animation: slideIn 400ms cubic-bezier(.34,1.1,.64,1) both;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* big emoji */
+.intro-emoji {
+  font-size: 4rem;
+  line-height: 1;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
+  animation: popIn 500ms cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.3); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* headline — elegant serif, not heavy */
+.intro-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.8rem, 6vw, 2.4rem);
+  font-weight: 400;
+  letter-spacing: -.01em;
+  line-height: 1.25;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  margin: 0;
+}
+.intro-title span { display: block; }
+
+/* subtitle */
+.intro-sub {
+  color: rgba(255,255,255,0.68);
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0;
+  font-weight: 300;
+  white-space: pre-line;
+}
+
+/* bottom */
+.intro-bottom {
+  padding: 16px 24px 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  position: relative; z-index: 2;
+}
+
+/* dots */
+.intro-dots { display: flex; gap: 8px; align-items: center; }
+.intro-dot {
+  height: 6px; width: 6px; border-radius: 99px;
+  background: rgba(255,255,255,0.28); border: none; cursor: pointer;
+  transition: width .3s, background .3s; padding: 0;
+}
+.intro-dot.on { width: 28px; background: #fff; }
+
+/* CTA — EXACT same as auth-white-btn */
+.intro-cta {
+  width: 100%;
+  height: 56px;
+  border-radius: 999px;
+  background: #fff;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.28);
+  border: none;
+  cursor: pointer;
+  transition: transform .15s;
+}
+.intro-cta:hover  { transform: translateY(-2px); }
+.intro-cta:active { transform: scale(.97); }
+
+/* sign in link */
+.intro-signin {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.55);
+  background: none; border: none; cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.intro-signin:hover { color: #fff; }
+
+@media (min-width: 600px) {
+  .intro-shell { max-width: 440px; margin: 0 auto; }
+}

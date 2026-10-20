@@ -92,7 +92,7 @@ const People = () => {
   };
 
   return (
-    <div className="page-container bank-page">
+    <div className="people-root">
       <div className="bank-hero">
         <div className="bank-topbar">
           <button type="button" className="bank-icon-btn" onClick={() => navigate(-1)} aria-label="Back">
@@ -157,7 +157,7 @@ const People = () => {
                       <span
                         className="people-settle"
                         onClick={(e) => handleSettleClick(person, e)}
-                        onKeyDown={() => {}}
+                        onKeyDown={() => { }}
                         role="presentation"
                       >
                         Settle
@@ -205,7 +205,6 @@ const People = () => {
               // iPaid = true means I paid → I lent money → they owe me
               // iPaid = false means they (or someone) paid → I owe them
               const iPaid = t.whoPaid === 'I paid for them';
-              const personPaid = !iPaid && t.whoPaid?.toLowerCase().includes(selectedPerson.name.toLowerCase());
               const isSettled = t.settledUp ||
                 (Array.isArray(t.splitWith) &&
                   t.splitWith.find((sw) => sw.name?.toLowerCase() === selectedPerson.name.toLowerCase())?.settledUp);

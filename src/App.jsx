@@ -3,7 +3,6 @@ import { useAuth } from './context/AuthContext';
 import { ToastProvider } from './components/Toast/Toast';
 import Layout from './components/Layout/Layout';
 
-// Pages
 import Dashboard from './pages/Dashboard/Dashboard';
 import AddExpense from './pages/AddExpense/AddExpense';
 import History from './pages/History/History';
@@ -12,19 +11,23 @@ import Reports from './pages/Reports/Reports';
 import Budget from './pages/Budget/Budget';
 import Auth from './pages/Auth/Auth';
 import Profile from './pages/Profile/Profile';
+import Intro from './pages/Intro/Intro';
 
-// Show a full-screen loader while Firebase resolves the auth session
 const AuthLoader = () => (
   <div className="auth-loader">
     <div className="auth-loader-spinner" />
-    <p className="auth-loader-text">Loading...</p>
+    <p className="auth-loader-text">Loading ExpenseTrack...</p>
   </div>
 );
 
 const PrivateRoute = ({ children }) => {
   const { currentUser, authLoading } = useAuth();
   if (authLoading) return <AuthLoader />;
-  return currentUser ? children : <Navigate to="/auth" replace />;
+  if (!currentUser) {
+    const hasSeenIntro = localStorage.getItem('hasSeenIntro');
+    return <Navigate to={hasSeenIntro ? '/auth' : '/intro'} replace />;
+  }
+  return children;
 };
 
 function App() {
@@ -36,6 +39,8 @@ function App() {
     <Router>
       <ToastProvider>
         <Routes>
+          <Route path="/intro" element={<Intro />} />
+
           <Route
             path="/auth"
             element={currentUser ? <Navigate to="/" replace /> : <Auth />}
@@ -50,6 +55,8 @@ function App() {
             <Route path="budget" element={<Budget />} />
             <Route path="profile" element={<Profile />} />
           </Route>
+
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </ToastProvider>
     </Router>

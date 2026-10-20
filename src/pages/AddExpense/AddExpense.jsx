@@ -34,22 +34,22 @@ const AddExpense = () => {
   const navigate = useNavigate();
 
   /* ── basic fields ── */
-  const [amount, setAmount]               = useState('');
-  const [category, setCategory]           = useState(CATEGORIES[0]);
-  const [date, setDate]                   = useState(getToday());
+  const [amount, setAmount] = useState('');
+  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [date, setDate] = useState(getToday());
   const [paymentMethod, setPaymentMethod] = useState(PAYMENT_METHODS[0]);
-  const [note, setNote]                   = useState('');
+  const [note, setNote] = useState('');
   const [showCatPicker, setShowCatPicker] = useState(false);
 
   /* ── split ── */
-  const [isShared, setIsShared]     = useState(false);
-  const [paidBy, setPaidBy]         = useState('me');   // 'me' | personId
+  const [isShared, setIsShared] = useState(false);
+  const [paidBy, setPaidBy] = useState('me');   // 'me' | personId
   const [splitMethod, setSplitMethod] = useState('equal'); // 'equal' | 'custom'
 
   // selectedPeople: [{ id, name, isNew }]
   const [selectedPeople, setSelectedPeople] = useState([]);
   // customShares: { [personId|tempId]: string amount }
-  const [customShares, setCustomShares]     = useState({});
+  const [customShares, setCustomShares] = useState({});
   // inline add-new-person input
   const [newPersonInput, setNewPersonInput] = useState('');
 
@@ -78,12 +78,12 @@ const AddExpense = () => {
     return result;
   }, [isShared, selectedPeople, splitMethod, numAmount, customShares, totalParticipants]);
 
-  const assignedTotal = useMemo(() => {
-    return Object.values(shares).reduce((s, v) => s + v, 0);
-  }, [shares]);
-
-  const remaining = numAmount - assignedTotal;
-  const isCustomValid = splitMethod !== 'custom' || Math.abs(remaining) < 1;
+  const customAssignedTotal = useMemo(
+    () => selectedPeople.reduce((sum, person) => sum + (Number(customShares[person.id]) || 0), 0),
+    [selectedPeople, customShares],
+  );
+  const remaining = numAmount - customAssignedTotal;
+  const isCustomValid = splitMethod !== 'custom' || remaining >= 0;
 
   /* ── add/remove people ── */
   const togglePerson = useCallback((person) => {
@@ -124,7 +124,10 @@ const AddExpense = () => {
       return;
     }
     if (isShared && splitMethod === 'custom' && !isCustomValid) {
-      addToast(`₹${Math.abs(remaining).toLocaleString('en-IN')} ${remaining > 0 ? 'unassigned' : 'over-assigned'}`, 'error');
+      addToast(
+        `₹${Math.abs(remaining).toLocaleString('en-IN')} ${remaining > 0 ? 'unassigned' : 'over-assigned'}`,
+        'error',
+      );
       return;
     }
 
@@ -143,10 +146,10 @@ const AddExpense = () => {
 
       // build splitWith array: [{ personId, name, shareAmount, settledUp }]
       const splitWith = resolvedPeople.map((p) => ({
-        personId:    p.id,
-        name:        p.name,
+        personId: p.id,
+        name: p.name,
         shareAmount: shares[selectedPeople.find((sp) => sp.name === p.name)?.id] ?? 0,
-        settledUp:   false,
+        settledUp: false,
       }));
 
       // determine paidBy label
@@ -164,19 +167,19 @@ const AddExpense = () => {
         : shares.me || 0;
 
       await addExpense({
-        amount:      numAmount,
+        amount: numAmount,
         category,
         date,
         paymentMethod,
         note,
         isShared,
         // new multi-person fields
-        splitWith:   isShared ? splitWith : [],
+        splitWith: isShared ? splitWith : [],
         // legacy fields — kept for backward compat with existing data
-        sharedWith:  isShared ? sharedWithNames : '',
-        whoPaid:     isShared ? whoPaid : '',
+        sharedWith: isShared ? sharedWithNames : '',
+        whoPaid: isShared ? whoPaid : '',
         splitAmount: isShared ? splitAmount : 0,
-        settledUp:   false,
+        settledUp: false,
       });
 
       addToast('Expense saved!', 'success');
@@ -196,7 +199,7 @@ const AddExpense = () => {
   );
 
   return (
-    <div className="page-container bank-page">
+    <div className="add-root">
 
       {/* ── blue hero ── */}
       <div className="bank-hero add-hero">

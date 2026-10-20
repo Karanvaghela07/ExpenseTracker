@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useExpense } from '../../context/ExpenseContext';
 import {
   LayoutDashboard,
@@ -28,8 +28,6 @@ const navItems = [
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { state } = useExpense();
-  const location = useLocation();
-
   const sections = [...new Set(navItems.map(item => item.section))];
 
   const getInitials = (name) => {
