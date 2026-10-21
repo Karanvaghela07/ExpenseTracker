@@ -170,6 +170,11 @@
     /* critical for flex scroll to work */
   }
 
+  /* Keep inline actions above the fixed mobile bottom navigation. */
+  .modal-without-footer .modal-body {
+    padding-bottom: calc(106px + env(safe-area-inset-bottom));
+  }
+
   /* Footer — always pinned at bottom, never scrolls */
   .modal-footer {
     flex-shrink: 0;
