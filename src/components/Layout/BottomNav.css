@@ -14,75 +14,105 @@
 }
 
 .dock-nav-items {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) clamp(44px, 13vw, 58px) repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   align-items: center;
-  min-height: 76px;
-  padding: 7px max(10px, 2vw);
-  background: #ffffff;
-  border-top: 1px solid #e2ecee;
-  box-shadow: 0 -6px 20px rgba(30, 86, 94, 0.1);
+  gap: clamp(4px, 1.2vw, 8px);
+  min-height: 82px;
+  padding: 9px max(10px, 2vw) 10px;
+  background: rgba(255, 255, 255, 0.96);
+  border-top: 1px solid rgba(209, 229, 231, 0.9);
+  box-shadow: 0 -10px 30px rgba(30, 86, 94, 0.11);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.dock-nav-items::before {
+  position: absolute;
+  top: 0;
+  right: 18%;
+  left: 18%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(57, 185, 207, 0.35), transparent);
+  content: '';
 }
 
 .dock-item {
   min-width: 0;
   position: relative;
   display: flex;
+  min-height: 56px;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1px;
   color: #3c4649;
   text-decoration: none;
+  border: 1px solid #edf3f4;
+  border-radius: 15px;
+  background: #f8fbfb;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
+.dock-item:hover {
+  background: #f0fbfb;
+  border-color: #dceff0;
+}
+
 .dock-icon-wrapper {
-  width: 42px;
-  height: 42px;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 13px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  border-radius: 9px;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .dock-item.active .dock-icon-wrapper {
-  background: #c9f1f2;
   color: #172528;
+  transform: translateY(-1px);
 }
 
 .dock-label {
-  position: absolute;
   display: none;
 }
 
 .dock-item.active .dock-label {
   display: block;
-  bottom: 1px;
   color: #172528;
   font-size: 8px;
   font-weight: 600;
+  letter-spacing: 0.01em;
   line-height: 1;
   white-space: nowrap;
 }
 
 .dock-add-btn {
-  width: 48px;
-  height: 48px;
-  justify-self: center;
+  min-width: 0;
+  min-height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #45c7d1 0%, #238ea3 100%);
-  color: #ffffff;
-  box-shadow: 0 6px 15px rgba(35, 142, 163, 0.28);
-  border: 2px solid #ffffff;
+  border: 1px solid #b9e7e9;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #e5fbfb, #c8f1f2);
+  color: #167c90;
+  box-shadow: 0 5px 12px rgba(57, 185, 207, 0.16);
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.dock-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(35, 142, 163, 0.24);
 }
 
 .dock-add-btn:active {
-  transform: scale(0.95);
+  transform: scale(0.94);
 }
 
 @media (min-width: 992px) {
@@ -93,14 +123,21 @@
 
 @media (max-width: 390px) {
   .dock-nav-items {
-    min-height: 68px;
+    min-height: 72px;
+    gap: 3px;
     padding-right: 5px;
     padding-left: 5px;
   }
 
+  .dock-item,
+  .dock-add-btn {
+    min-height: 48px;
+    border-radius: 12px;
+  }
+
   .dock-icon-wrapper {
-    width: 36px;
-    height: 36px;
+    width: 26px;
+    height: 26px;
   }
 
   .dock-icon-wrapper svg {
@@ -108,22 +145,27 @@
     height: 18px;
   }
 
-  .dock-add-btn {
-    width: 42px;
-    height: 42px;
-  }
 }
 
 @media (max-width: 340px) {
   .dock-nav-items {
     min-height: 64px;
+    gap: 2px;
+    padding-top: 5px;
+    padding-bottom: 6px;
     padding-right: 2px;
     padding-left: 2px;
   }
 
+  .dock-item,
+  .dock-add-btn {
+    min-height: 44px;
+    border-radius: 10px;
+  }
+
   .dock-icon-wrapper {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
   }
 
   .dock-icon-wrapper svg {
@@ -131,13 +173,8 @@
     height: 16px;
   }
 
-  .dock-add-btn {
-    width: 38px;
-    height: 38px;
-  }
-
   .dock-add-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 19px;
+    height: 19px;
   }
 }

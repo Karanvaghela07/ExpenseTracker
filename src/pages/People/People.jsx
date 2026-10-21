@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Users } from 'lucide-react';
+import { ArrowLeft, MessageCircle, Plus, Users } from 'lucide-react';
 import { useExpense } from '../../context/ExpenseContext';
 import { useToast } from '../../components/Toast/Toast';
 import Modal from '../../components/Modal/Modal';
@@ -91,6 +91,47 @@ const People = () => {
     return expense.splitAmount || expense.amount;
   };
 
+  const sharePersonOnWhatsApp = (person) => {
+    const transactions = getPersonTransactions(person.name).filter((expense) => {
+      const personSplit = Array.isArray(expense.splitWith)
+        ? expense.splitWith.find(
+          (sw) => sw.name?.toLowerCase() === person.name.toLowerCase(),
+        )
+        : null;
+      return !expense.settledUp && !personSplit?.settledUp;
+    });
+    const transactionLines = transactions.length > 0
+      ? transactions.map((expense) => {
+        const amount = getPersonShare(expense, person.name);
+        const direction = expense.whoPaid === 'I paid for them' ? 'You lent' : 'You owe';
+        return `• ${formatDateShort(expense.date)} - ${expense.note || expense.category}: ${formatCurrency(amount)} (${direction})`;
+      }).join('\n')
+      : '• No running shared transactions';
+
+    const finalStatus = person.balance > 0
+      ? `${person.name} owes you`
+      : person.balance < 0
+        ? `You owe ${person.name}`
+        : 'You are settled up';
+    const finalAmount = formatCurrency(Math.abs(person.balance));
+    const userName = state.user.name || 'Budget Buddy';
+    const message = [
+      `Hi ${person.name},`,
+      '',
+      `Here is our expense summary from ${userName}:`,
+      '',
+      transactionLines,
+      '',
+      `Final amount: ${finalAmount}`,
+      finalStatus,
+      '',
+      'Shared from Budget Buddy',
+    ].join('\n');
+
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <div className="people-root">
       <div className="bank-hero">
@@ -178,6 +219,14 @@ const People = () => {
           title={`With ${selectedPerson.name}`}
           footer={(
             <>
+              <button
+                type="button"
+                className="btn people-whatsapp-btn"
+                onClick={() => sharePersonOnWhatsApp(selectedPerson)}
+              >
+                <MessageCircle size={16} />
+                Share on WhatsApp
+              </button>
               {selectedPerson.balance !== 0 && (
                 <button
                   type="button"

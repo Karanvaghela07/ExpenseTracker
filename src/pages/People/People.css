@@ -173,6 +173,20 @@
   background: #d2f0ee;
 }
 
+.people-whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #128c7e;
+  background: #e4f7ef;
+  border: 1px solid #b8e6d3;
+}
+
+.people-whatsapp-btn:hover {
+  background: #d2f1e4;
+  border-color: #8ed5b6;
+}
+
 /* ── Empty state ── */
 .people-empty {
   text-align: center;
