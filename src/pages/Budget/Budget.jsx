@@ -14,7 +14,7 @@ const CAT_META = {
   Food:          { icon: Utensils,    color: '#f97316', bg: 'rgba(249,115,22,0.15)' },
   Travel:        { icon: Train,       color: '#0ea5e9', bg: 'rgba(56,189,248,0.15)' },
   Groceries:     { icon: ShoppingCart,color: '#10b981', bg: 'rgba(16,185,129,0.15)' },
-  'Rent/Bills':  { icon: Home,        color: '#8b5cf6', bg: 'rgba(139,92,246,0.15)' },
+  'Rent/Bills':  { icon: Home,        color: '#238ea3', bg: 'rgba(57,185,207,0.15)' },
   Shopping:      { icon: ShoppingBag, color: '#ec4899', bg: 'rgba(236,72,153,0.15)' },
   Entertainment: { icon: Coffee,      color: '#f59e0b', bg: 'rgba(245,158,11,0.15)' },
   Health:        { icon: Heart,       color: '#f43f5e', bg: 'rgba(244,63,94,0.15)' },

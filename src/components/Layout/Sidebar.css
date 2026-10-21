@@ -3,10 +3,10 @@
   top: 0; left: 0;
   width: var(--sidebar-width);
   height: 100vh;
-  background: rgba(6,10,22,0.92);
+  background: rgba(255,255,255,0.94);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border-right: 1px solid rgba(255,255,255,0.06);
+  border-right: 1px solid #e2eeee;
   display: flex;
   flex-direction: column;
   z-index: 100;
@@ -39,10 +39,10 @@
 .sidebar-logo {
   width: 38px; height: 38px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+  background: linear-gradient(135deg, #45c7d1, #238ea3);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(124,58,237,0.45);
+  box-shadow: 0 4px 14px rgba(35,142,163,0.22);
 }
 .sidebar-logo svg { width: 20px; height: 20px; color: white; }
 
@@ -50,7 +50,7 @@
   font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #a78bfa, #67e8f9);
+  background: linear-gradient(135deg, #248ea1, #1d6f80);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -62,7 +62,7 @@
 }
 .sidebar-brand-tagline {
   font-size: 10px;
-  color: var(--text-tertiary);
+  color: #789096;
   margin-top: 1px;
   white-space: nowrap;
   overflow: hidden;
@@ -107,14 +107,14 @@
 }
 
 .nav-item:hover {
-  background: rgba(255,255,255,0.05);
-  color: var(--text-primary);
+  background: #eef9f9;
+  color: #1d3a42;
 }
 
 .nav-item.active {
-  background: linear-gradient(135deg, rgba(124,58,237,0.18), rgba(6,182,212,0.10));
-  color: #c4b5fd;
-  border: 1px solid rgba(124,58,237,0.20);
+  background: #dff5f5;
+  color: #167c90;
+  border: 1px solid #bce9eb;
 }
 
 .nav-item.active::before {
@@ -123,7 +123,7 @@
   left: 0; top: 50%;
   transform: translateY(-50%);
   width: 3px; height: 18px;
-  background: linear-gradient(180deg, #7c3aed, #06b6d4);
+  background: linear-gradient(180deg, #43c7d1, #238ea3);
   border-radius: 0 3px 3px 0;
 }
 
@@ -147,12 +147,12 @@
   text-decoration: none;
   color: inherit;
 }
-.sidebar-user:hover { background: rgba(255,255,255,0.05); }
+.sidebar-user:hover { background: #f1f9f9; }
 
 .sidebar-avatar {
   width: 34px; height: 34px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+  background: linear-gradient(135deg, #45c7d1, #238ea3);
   display: flex; align-items: center; justify-content: center;
   font-family: var(--font-display);
   font-size: 13px;
@@ -164,7 +164,7 @@
 .sidebar-user-name {
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--text-primary);
+  color: #19343c;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

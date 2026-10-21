@@ -32,7 +32,7 @@ const CAT_COLORS = {
   Food: { bg: 'rgba(249,115,22,0.13)', color: '#f97316' },
   Travel: { bg: 'rgba(56,189,248,0.13)', color: '#0ea5e9' },
   Groceries: { bg: 'rgba(16,185,129,0.13)', color: '#10b981' },
-  'Rent/Bills': { bg: 'rgba(139,92,246,0.13)', color: '#8b5cf6' },
+  'Rent/Bills': { bg: 'rgba(57,185,207,0.13)', color: '#238ea3' },
   Shopping: { bg: 'rgba(236,72,153,0.13)', color: '#ec4899' },
   Entertainment: { bg: 'rgba(245,158,11,0.13)', color: '#f59e0b' },
   Health: { bg: 'rgba(244,63,94,0.13)', color: '#f43f5e' },

@@ -2,15 +2,28 @@
    Add Expense — multi-person split
 ══════════════════════════════════ */
 
+.add-root {
+  min-height: 100vh;
+  margin: -10px auto 0;
+  padding-top: 10px;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 255, 255, .72), transparent 34%),
+    linear-gradient(180deg, #c9eef0 0%, #eaf8f8 45%, #f5f8f8 100%);
+  border-radius: 0 0 28px 28px;
+}
+
 .add-hero {
-  padding-bottom: 32px;
+  min-height: 284px;
+  padding: 18px 18px 42px;
   text-align: center;
+  color: #17343b;
 }
 
 .add-hero-label {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
-  color: rgba(255, 255, 255, .85);
+  color: #17343b;
+  letter-spacing: -.02em;
 }
 
 /* amount */
@@ -19,7 +32,7 @@
   align-items: baseline;
   justify-content: center;
   gap: 4px;
-  margin-top: 20px;
+  margin-top: 32px;
   position: relative;
   z-index: 2;
 }
@@ -28,25 +41,25 @@
   font-family: var(--font-display);
   font-size: 2.2rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, .70);
+  color: #39717b;
 }
 
 .add-amount-input {
   font-family: var(--font-display);
-  font-size: 3.8rem;
+  font-size: 4.1rem;
   font-weight: 900;
-  color: #fff;
+  color: #17343b;
   background: transparent;
   border: none;
   outline: none;
   width: min(220px, 65vw);
   text-align: center;
   letter-spacing: -.04em;
-  caret-color: rgba(255, 255, 255, .8);
+  caret-color: #238ea3;
 }
 
 .add-amount-input::placeholder {
-  color: rgba(255, 255, 255, .28);
+  color: rgba(57, 113, 123, .34);
 }
 
 .add-amount-input::-webkit-outer-spin-button,
@@ -63,12 +76,12 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 16px;
-  padding: 7px 14px;
+  margin-top: 22px;
+  padding: 9px 16px;
   border-radius: 99px;
-  background: rgba(255, 255, 255, .15);
-  border: 1px solid rgba(255, 255, 255, .20);
-  color: rgba(255, 255, 255, .90);
+  background: rgba(255, 255, 255, .62);
+  border: 1px solid rgba(57, 113, 123, .18);
+  color: #39717b;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -78,13 +91,16 @@
 }
 
 .add-cat-chip:hover {
-  background: rgba(255, 255, 255, .22);
+  background: rgba(255, 255, 255, .82);
 }
 
 /* sheet */
 .add-sheet {
-  padding-top: 26px;
-  padding-bottom: 110px;
+  margin-top: -20px;
+  padding: 30px 24px 116px;
+  border-radius: 30px 30px 0 0;
+  border: 1px solid rgba(220, 235, 237, .9);
+  box-shadow: 0 -12px 34px rgba(63, 145, 153, .08);
 }
 
 .add-form {
@@ -109,6 +125,33 @@
   padding-left: 12px;
   padding-right: 12px;
   font-size: 0.88rem;
+}
+
+.add-sheet .form-label {
+  color: #8ba2a7;
+  font-size: 12px;
+  letter-spacing: .1em;
+}
+
+.add-sheet .form-input,
+.add-sheet .form-select {
+  min-height: 58px;
+  padding: 15px 16px;
+  border-radius: 18px;
+  background: #f8fafc;
+  border: 1px solid #dbe5ed;
+  color: #263640;
+  font-size: 15px;
+}
+
+.add-sheet .form-input:focus,
+.add-sheet .form-select:focus {
+  border-color: #8bdce5;
+  box-shadow: 0 0 0 3px rgba(57, 185, 207, .14);
+}
+
+.add-sheet .form-input::placeholder {
+  color: #a8b6bb;
 }
 
 @media (max-width: 520px) {
@@ -158,8 +201,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #f5f7ff;
-  border: 1.5px solid #e0e7ff;
+  background: #eefafa;
+  border: 1.5px solid #d4eeee;
   border-radius: 14px;
   padding: 14px 16px;
   cursor: pointer;
@@ -225,7 +268,7 @@
 }
 
 .add-toggle-ui.on {
-  background: #2662e8;
+  background: #39b9cf;
 }
 
 .add-toggle-ui.on::after {
@@ -629,7 +672,7 @@
   width: 100%;
   height: 52px;
   border-radius: 16px;
-  background: #1a1d27;
+  background: linear-gradient(135deg, #45c7d1, #238ea3);
   color: #fff;
   font-family: var(--font-display);
   font-size: 15px;
@@ -637,6 +680,7 @@
   border: none;
   cursor: pointer;
   margin-top: 4px;
+  box-shadow: 0 8px 18px rgba(35, 142, 163, .22);
   transition: opacity .15s, transform .12s;
 }
 

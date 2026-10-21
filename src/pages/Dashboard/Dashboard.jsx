@@ -19,6 +19,7 @@ import {
   BookOpen,
   Utensils,
   Package,
+  Search,
 } from 'lucide-react';
 import { PieChart, Pie, Cell, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useExpense } from '../../context/ExpenseContext';
@@ -129,6 +130,11 @@ const Dashboard = () => {
           </div>
         </div>
 
+        <div className="dash-search">
+          <Search size={16} />
+          <span>Search expenses...</span>
+        </div>
+
         {/* Big Balance Callout */}
         <div className="dash-balance-block">
           <span className="dash-balance-tag">This Month's Spending</span>
@@ -159,6 +165,28 @@ const Dashboard = () => {
           </Link>
         </div>
       </section>
+
+      <section className="dash-feature-row">
+        <Link to="/history" className="dash-feature-card dark">
+          <span className="dash-feature-label">This month</span>
+          <strong>{formatCurrency(monthSpend)}</strong>
+          <span className="dash-feature-meta">{recentActivity.length} recent expenses</span>
+        </Link>
+        <Link to="/budget" className="dash-feature-card">
+          <span className="dash-feature-label">Today</span>
+          <strong>{formatCurrency(todaysSpend)}</strong>
+          <span className="dash-feature-meta">View your daily spending</span>
+        </Link>
+      </section>
+
+      <Link to="/reports" className="dash-special-card">
+        <span className="dash-special-icon">//</span>
+        <span>
+          <strong>Every expense tells a story</strong>
+          <small>Keep your spending clear and intentional.</small>
+        </span>
+        <ChevronRight size={16} />
+      </Link>
 
       {/* ── 4 STAT CARDS ── */}
       <section className="dash-stats-grid">
@@ -212,8 +240,8 @@ const Dashboard = () => {
                 <AreaChart data={areaData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="dashTrendGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.35} />
-                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.0} />
+                      <stop offset="5%" stopColor="#45c7d1" stopOpacity={0.35} />
+                      <stop offset="95%" stopColor="#45c7d1" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
                   <XAxis
@@ -233,7 +261,7 @@ const Dashboard = () => {
                   <Area
                     type="monotone"
                     dataKey="amount"
-                    stroke="#8b5cf6"
+                    stroke="#45c7d1"
                     strokeWidth={2.5}
                     fillOpacity={1}
                     fill="url(#dashTrendGrad)"

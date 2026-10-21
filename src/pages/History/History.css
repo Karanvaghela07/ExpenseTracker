@@ -5,14 +5,14 @@
 }
 
 .hist-hero {
-  padding-bottom: 20px;
+  padding: 8px 6px 18px;
 }
 
 .hist-hero-title {
   font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #172b33;
   letter-spacing: -0.015em;
 }
 
@@ -23,10 +23,10 @@
   gap: 24px;
   margin-top: 18px;
   padding: 14px 24px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #ffffff;
+  border: 1px solid #e2eeee;
   border-radius: 18px;
-  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 24px rgba(30, 86, 94, 0.06);
 }
 
 .hist-summary-item {
@@ -40,14 +40,14 @@
   font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #172b33;
   letter-spacing: -0.03em;
   line-height: 1;
 }
 
 .hist-summary-label {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #82979c;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -56,7 +56,7 @@
 .hist-summary-divider {
   width: 1px;
   height: 36px;
-  background: rgba(255, 255, 255, 0.2);
+  background: #e2eeee;
 }
 
 /* ── Grouped List ── */
@@ -81,7 +81,7 @@
   padding: 8px 4px;
   font-size: 12px;
   font-weight: 700;
-  color: #94a3b8;
+  color: #82979c;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   border-bottom: 1px solid #f1f5f9;
@@ -99,13 +99,15 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 4px;
+  padding: 12px 10px;
+  background: #ffffff;
+  border: 1px solid #edf3f3;
   border-radius: 14px;
   transition: background 0.15s;
 }
 
 .hist-row:hover {
-  background: #f8fafc;
+  background: #f0fbfb;
 }
 
 .hist-row-icon {
@@ -146,8 +148,8 @@
   font-weight: 600;
   padding: 2px 7px;
   border-radius: 9999px;
-  background: rgba(139, 92, 246, 0.12);
-  color: #8b5cf6;
+  background: #dff5f5;
+  color: #238ea3;
 }
 
 .hist-row-right {

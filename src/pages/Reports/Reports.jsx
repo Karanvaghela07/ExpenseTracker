@@ -31,7 +31,7 @@ const CAT_META = {
   Food: { icon: Utensils, color: '#f97316' },
   Travel: { icon: Train, color: '#3b82f6' },
   Groceries: { icon: ShoppingCart, color: '#10b981' },
-  'Rent/Bills': { icon: Home, color: '#8b5cf6' },
+  'Rent/Bills': { icon: Home, color: '#238ea3' },
   Shopping: { icon: ShoppingBag, color: '#ec4899' },
   Entertainment: { icon: Coffee, color: '#f59e0b' },
   Health: { icon: Heart, color: '#ef4444' },

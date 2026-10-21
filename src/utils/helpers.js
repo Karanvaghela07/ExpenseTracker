@@ -86,7 +86,7 @@ export const getCategoryColor = (category) => {
     'Food': '#f97316',
     'Travel': '#3b82f6',
     'Groceries': '#10b981',
-    'Rent/Bills': '#8b5cf6',
+    'Rent/Bills': '#238ea3',
     'Shopping': '#ec4899',
     'Entertainment': '#f59e0b',
     'Health': '#ef4444',

@@ -6,8 +6,8 @@
 
 /* ── Overview Progress Card ── */
 .budg-overview {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #e7f8f8 0%, #f7fbfb 100%);
+  border: 1px solid #d6eded;
   border-radius: 20px;
   padding: 20px;
   margin-bottom: 24px;
@@ -59,8 +59,8 @@
 
 .budg-item {
   padding: 16px;
-  background: #f8fafc;
-  border: 1px solid #e9edf5;
+  background: #ffffff;
+  border: 1px solid #e2eeee;
   border-radius: 18px;
 }
 
@@ -166,7 +166,7 @@
 }
 
 .budg-input-wrap:focus-within {
-  border-color: #8b5cf6;
+  border-color: #55c5cd;
   box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
 }
 
@@ -213,8 +213,8 @@
 
 .budg-item:hover {
   transform: translateY(-2px);
-  border-color: #d8d1ff;
-  box-shadow: 0 10px 24px rgba(139, 92, 246, 0.09);
+  border-color: #a8e1e5;
+  box-shadow: 0 10px 24px rgba(57, 185, 207, 0.1);
 }
 
 .budg-form-grid {

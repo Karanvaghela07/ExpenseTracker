@@ -18,7 +18,7 @@
 .people-add-link {
   font-size: 13px;
   font-weight: 600;
-  color: #8b5cf6;
+  color: #238ea3;
   background: none;
   border: none;
   cursor: pointer;
@@ -36,8 +36,8 @@
   align-items: center;
   gap: 14px;
   padding: 16px;
-  background: #f8fafc;
-  border: 1.5px solid #e9edf5;
+  background: #ffffff;
+  border: 1.5px solid #e2eeee;
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -47,8 +47,8 @@
 }
 
 .people-card:hover {
-  background: #f1f5f9;
-  border-color: #8b5cf6;
+  background: #f0fbfb;
+  border-color: #8bdce5;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(139, 92, 246, 0.15);
 }
@@ -62,7 +62,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  background: linear-gradient(135deg, #45c7d1 0%, #238ea3 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -70,7 +70,7 @@
   font-size: 20px;
   font-weight: 800;
   color: #fff;
-  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+  box-shadow: 0 6px 16px rgba(35, 142, 163, 0.22);
   flex-shrink: 0;
 }
 
@@ -123,14 +123,14 @@
   font-weight: 700;
   padding: 4px 12px;
   border-radius: 9999px;
-  background: rgba(139, 92, 246, 0.1);
-  color: #8b5cf6;
+  background: #e1f6f1;
+  color: #238ea3;
   transition: background 0.15s;
   cursor: pointer;
 }
 
 .people-settle:hover {
-  background: rgba(139, 92, 246, 0.2);
+  background: #d2f0ee;
 }
 
 /* ── Empty state ── */
