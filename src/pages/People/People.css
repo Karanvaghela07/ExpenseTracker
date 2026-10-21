@@ -1,7 +1,45 @@
 /* ── People Page ── */
 
 .people-root {
+  position: relative;
   animation: fadeIn 0.4s ease-out;
+}
+
+.people-root .bank-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 92% 4%, rgba(255,255,255,0.4) 0 10%, transparent 35%),
+    linear-gradient(135deg, #dff8f7 0%, #c5eff0 46%, #eefaf8 100%);
+  border: 1px solid rgba(126, 211, 216, 0.42);
+  box-shadow: 0 18px 38px rgba(35, 142, 163, 0.12);
+}
+
+.people-root .bank-hero::after {
+  content: '';
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  left: -92px;
+  bottom: -128px;
+  border: 1px solid rgba(255,255,255,0.55);
+  border-radius: 50%;
+  box-shadow: 0 0 0 18px rgba(255,255,255,0.14), 0 0 0 36px rgba(255,255,255,0.1);
+  pointer-events: none;
+}
+
+.people-root .bank-hero-pill {
+  background: rgba(255,255,255,0.68);
+  border-color: rgba(255,255,255,0.72);
+  color: #2e6871;
+  backdrop-filter: blur(10px);
+}
+
+.people-root .bank-sheet {
+  position: relative;
+  margin-top: -18px;
+  border: 1px solid rgba(220, 238, 239, 0.92);
+  box-shadow: 0 18px 40px rgba(30, 86, 94, 0.08);
 }
 
 /* ── People List ── */
@@ -12,7 +50,7 @@
 .people-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .people-add-link {
@@ -32,13 +70,14 @@
 
 /* ── Person Card ── */
 .people-card {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 16px;
-  background: #ffffff;
+  padding: 17px;
+  background: linear-gradient(145deg, #ffffff 0%, #fbfefe 100%);
   border: 1.5px solid #e2eeee;
-  border-radius: 20px;
+  border-radius: 21px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: left;
@@ -47,10 +86,10 @@
 }
 
 .people-card:hover {
-  background: #f0fbfb;
+  background: linear-gradient(145deg, #ffffff 0%, #effafa 100%);
   border-color: #8bdce5;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.15);
+  box-shadow: 0 10px 24px rgba(35, 142, 163, 0.12);
 }
 
 .people-card:active {
@@ -71,6 +110,7 @@
   font-weight: 800;
   color: #fff;
   box-shadow: 0 6px 16px rgba(35, 142, 163, 0.22);
+  border: 3px solid #ffffff;
   flex-shrink: 0;
 }
 
@@ -191,16 +231,16 @@
 .people-card:focus-visible,
 .people-add-link:focus-visible,
 .people-settle:focus-visible {
-  outline: 3px solid rgba(139, 92, 246, 0.3);
+  outline: 3px solid rgba(85, 197, 205, 0.3);
   outline-offset: 3px;
 }
 
 .people-empty {
   min-height: 260px;
   justify-content: center;
-  border: 1px dashed #d8deea;
-  border-radius: 18px;
-  background: #fbfcff;
+  border: 1px dashed #b9dfe1;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #fbffff, #f1fbfa);
 }
 
 @media (max-width: 600px) {

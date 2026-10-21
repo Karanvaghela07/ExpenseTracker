@@ -1,7 +1,49 @@
 /* ── Budget Page ── */
 
 .budg-root {
+  position: relative;
   animation: fadeIn 0.4s ease-out;
+}
+
+.budg-root .bank-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(255,255,255,0.34) 0 11%, transparent 34%),
+    linear-gradient(135deg, #dff8f7 0%, #bdecef 48%, #eafaf8 100%);
+  border: 1px solid rgba(126, 211, 216, 0.42);
+  box-shadow: 0 18px 38px rgba(35, 142, 163, 0.12);
+}
+
+.budg-root .bank-hero::after {
+  content: '';
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  right: -70px;
+  bottom: -110px;
+  border: 1px solid rgba(255,255,255,0.55);
+  border-radius: 50%;
+  box-shadow: 0 0 0 18px rgba(255,255,255,0.14), 0 0 0 36px rgba(255,255,255,0.1);
+  pointer-events: none;
+}
+
+.budg-root .bank-hero-value {
+  color: #123b43;
+}
+
+.budg-root .bank-hero-pill {
+  background: rgba(255,255,255,0.68);
+  border-color: rgba(255,255,255,0.72);
+  color: #2e6871;
+  backdrop-filter: blur(10px);
+}
+
+.budg-root .bank-sheet {
+  position: relative;
+  margin-top: -18px;
+  border: 1px solid rgba(220, 238, 239, 0.92);
+  box-shadow: 0 18px 40px rgba(30, 86, 94, 0.08);
 }
 
 /* ── Overview Progress Card ── */
@@ -9,7 +51,7 @@
   background: linear-gradient(135deg, #e7f8f8 0%, #f7fbfb 100%);
   border: 1px solid #d6eded;
   border-radius: 20px;
-  padding: 20px;
+  padding: 22px;
   margin-bottom: 24px;
 }
 
@@ -38,8 +80,17 @@
 .budg-overview-pct.danger  { color: #f43f5e; }
 
 .budg-bar {
-  height: 12px;
+  height: 14px;
   border-radius: 99px;
+  background: #d7eeee;
+  padding: 2px;
+}
+
+.budg-bar .progress-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #48c9d0, #238ea3);
+  box-shadow: 0 3px 10px rgba(35, 142, 163, 0.2);
 }
 
 .budg-overview-sub {
@@ -58,10 +109,11 @@
 }
 
 .budg-item {
-  padding: 16px;
-  background: #ffffff;
-  border: 1px solid #e2eeee;
-  border-radius: 18px;
+  padding: 18px;
+  background: linear-gradient(145deg, #ffffff 0%, #fbfefe 100%);
+  border: 1px solid #e0eeee;
+  border-radius: 20px;
+  box-shadow: 0 7px 18px rgba(30, 86, 94, 0.045);
 }
 
 .budg-item-header {
@@ -79,9 +131,9 @@
 }
 
 .budg-item-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,6 +153,27 @@
   font-size: 13px;
   white-space: nowrap;
   text-align: right;
+}
+
+.budg-item > .progress-bar {
+  height: 8px;
+  overflow: hidden;
+  background: #edf5f5;
+  border-radius: 99px;
+}
+
+.budg-item > .progress-bar .progress-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #52cbd0, #238ea3);
+}
+
+.budg-item > .progress-bar .progress-bar-fill.warning {
+  background: linear-gradient(90deg, #f7c65b, #f59e0b);
+}
+
+.budg-item > .progress-bar .progress-bar-fill.danger {
+  background: linear-gradient(90deg, #fb7185, #f43f5e);
 }
 
 .budg-spent {
@@ -158,16 +231,17 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #f8fafc;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 10px 12px;
+  background: #f7fbfb;
+  border: 1.5px solid #dcebec;
+  border-radius: 14px;
+  padding: 11px 13px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .budg-input-wrap:focus-within {
   border-color: #55c5cd;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(85, 197, 205, 0.14);
 }
 
 .budg-input-wrap span {
@@ -241,15 +315,13 @@
     gap: 6px;
   }
 
-  @media (max-width: 620px) {
-    .budg-sheet {
-      padding-left: 16px;
-      padding-right: 16px;
-    }
+  .budg-sheet {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 
-    .budg-form-grid {
-      grid-template-columns: minmax(0, 1fr);
-    }
+  .budg-form-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .budg-item {
