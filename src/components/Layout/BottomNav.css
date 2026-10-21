@@ -1,13 +1,13 @@
 .dock-wrapper {
   position: fixed;
-  bottom: 0;
+  bottom: max(8px, env(safe-area-inset-bottom));
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
   z-index: 999;
   pointer-events: none;
-  padding: 0;
+  padding: 0 8px;
 }
 
 .dock-container {
@@ -15,24 +15,24 @@
   display: flex;
   align-items: center;
   gap: 0;
-  max-width: 420px;
+  max-width: 500px;
   width: 100%;
   justify-content: space-between;
 }
 
 .dock-nav-items {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) 52px repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr)) 54px repeat(3, minmax(0, 1fr));
   min-width: 0;
-  height: 70px;
+  height: 72px;
   align-items: center;
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
   border: 1px solid #dcebed;
-  border-radius: 22px 22px 0 0;
-  padding: 6px 12px 8px;
-  box-shadow: 0 -5px 18px rgba(30, 86, 94, 0.08);
+  border-radius: 24px;
+  padding: 6px 10px 8px;
+  box-shadow: 0 8px 24px rgba(30, 86, 94, 0.14);
 }
 
 .dock-item {
@@ -41,7 +41,7 @@
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  padding: 3px 8px 2px;
+  padding: 3px 2px 2px;
   border-radius: 14px;
   color: #789096;
   text-decoration: none;
@@ -50,8 +50,8 @@
 }
 
 .dock-add-btn {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   justify-self: center;
   margin: 0;
   border-radius: 50%;
@@ -77,8 +77,8 @@
 
 .dock-icon-wrapper {
   position: relative;
-  width: 40px;
-  height: 36px;
+  width: 38px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -119,7 +119,11 @@
     gap: 6px;
   }
 
-  .dock-nav-items { padding-left: 12px; padding-right: 12px; }
+  .dock-nav-items {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) 46px repeat(3, minmax(0, 1fr));
+    padding-left: 6px;
+    padding-right: 6px;
+  }
 
   .dock-item {
     padding-left: 1px;
@@ -129,12 +133,41 @@
   .dock-add-btn {
     width: 42px;
     height: 42px;
-    flex-basis: 42px;
-    margin-left: 2px;
-    margin-right: 2px;
   }
 
   .dock-label {
     font-size: 9px;
+  }
+}
+
+@media (max-width: 340px) {
+  .dock-wrapper {
+    padding: 0 4px;
+  }
+
+  .dock-nav-items {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) 40px repeat(3, minmax(0, 1fr));
+    height: 64px;
+    border-radius: 20px;
+  }
+
+  .dock-icon-wrapper {
+    width: 30px;
+    height: 30px;
+  }
+
+  .dock-icon-wrapper svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .dock-add-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .dock-add-btn svg {
+    width: 21px;
+    height: 21px;
   }
 }
