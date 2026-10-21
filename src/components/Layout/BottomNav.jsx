@@ -15,7 +15,9 @@ const DockItem = ({ item }) => (
   <NavLink
     to={item.path}
     end={item.path === '/'}
-    className={({ isActive }) => `dock-item ${isActive ? 'active' : ''}`}
+    className={({ isActive }) =>
+      `dock-item dock-item-${item.label.toLowerCase()} ${isActive ? 'active' : ''}`
+    }
   >
     <div className="dock-icon-wrapper">
       <item.icon size={19} strokeWidth={2} />

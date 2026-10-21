@@ -7,7 +7,7 @@
   justify-content: center;
   z-index: 999;
   pointer-events: none;
-  padding: 0 8px;
+  padding: 0 max(10px, env(safe-area-inset-right)) 0 max(10px, env(safe-area-inset-left));
 }
 
 .dock-container {
@@ -15,23 +15,23 @@
   display: flex;
   align-items: center;
   gap: 0;
-  max-width: 500px;
-  width: 100%;
+  width: min(374px, calc(100vw - 20px));
+  max-width: 100%;
   justify-content: space-between;
 }
 
 .dock-nav-items {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) 54px repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr)) clamp(44px, 12vw, 54px) repeat(3, minmax(0, 1fr));
   min-width: 0;
-  height: 72px;
+  height: 86px;
   align-items: center;
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
   border: 1px solid #dcebed;
-  border-radius: 24px;
-  padding: 6px 10px 8px;
+  border-radius: 27px;
+  padding: 8px 10px 10px;
   box-shadow: 0 8px 24px rgba(30, 86, 94, 0.14);
 }
 
@@ -41,7 +41,7 @@
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  padding: 3px 2px 2px;
+  padding: 4px 1px 3px;
   border-radius: 14px;
   color: #789096;
   text-decoration: none;
@@ -50,8 +50,8 @@
 }
 
 .dock-add-btn {
-  width: 50px;
-  height: 50px;
+  width: 58px;
+  height: 58px;
   justify-self: center;
   margin: 0;
   border-radius: 50%;
@@ -77,8 +77,8 @@
 
 .dock-icon-wrapper {
   position: relative;
-  width: 38px;
-  height: 34px;
+  width: 40px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,7 +98,7 @@
 
 .dock-label {
   display: none;
-  font-size: 9px;
+  font-size: clamp(8px, 2.2vw, 9px);
   font-weight: 600;
   letter-spacing: 0.02em;
   white-space: nowrap;
@@ -115,14 +115,10 @@
 }
 
 @media (max-width: 390px) {
-  .dock-container {
-    gap: 6px;
-  }
-
   .dock-nav-items {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) 46px repeat(3, minmax(0, 1fr));
-    padding-left: 6px;
-    padding-right: 6px;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) 44px repeat(3, minmax(0, 1fr));
+    height: 78px;
+    border-radius: 24px;
   }
 
   .dock-item {
@@ -134,21 +130,28 @@
     width: 42px;
     height: 42px;
   }
-
-  .dock-label {
-    font-size: 9px;
-  }
 }
 
 @media (max-width: 340px) {
-  .dock-wrapper {
-    padding: 0 4px;
+  .dock-container {
+    width: calc(100vw - 12px);
   }
 
   .dock-nav-items {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) 40px repeat(3, minmax(0, 1fr));
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) 0 repeat(1, minmax(0, 1fr));
     height: 64px;
     border-radius: 20px;
+  }
+
+  .dock-item-budget,
+  .dock-item-people,
+  .dock-add-btn {
+    display: none;
+  }
+
+  .dock-item-profile {
+    grid-column: 5;
   }
 
   .dock-icon-wrapper {
@@ -161,13 +164,4 @@
     height: 17px;
   }
 
-  .dock-add-btn {
-    width: 38px;
-    height: 38px;
-  }
-
-  .dock-add-btn svg {
-    width: 21px;
-    height: 21px;
-  }
 }
